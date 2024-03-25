@@ -127,7 +127,7 @@ window.addEventListener("message", async function (event) {
 
 
 const loadWeb = async () => {
-    var res = await request.post(`getInfoWeb.php?key=${API_KEY.value}`, {
+    var res = await request.post(`getinfoWeb.php?key=${API_KEY.value}`, {
         key: API_KEY.value
     })
     infoWeb.value = res.data[0]
@@ -174,6 +174,12 @@ const loadLayout = async () => {
     if (txtSearchBox.value.length > 1) {
         url += "&search=" + txtSearchBox.value
     }
+    if (selectTopic.value.length > 1) {
+        url += "&ChuDe=" + selectTopic.value
+        if (selectSubTopic.value.length > 1) {
+            url += "&subChuDe=" + selectSubTopic.value
+        }
+    }
     var res = await request.post(url, {
         key: API_KEY.value
     })
@@ -205,7 +211,6 @@ function sha256(data) {
 }
 const chooseItem = async (item) => {
     selectItem.value = null
-    console.log(item)
     setTimeout(() => {
         selectItem.value = item;
     }, 200)
@@ -222,11 +227,21 @@ watch(selectTopic, (oldValue, newValue) => {
     // boxSearch.value = ''
     // page.value = 0
     // limit.value = 10
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+        loadLayout()
+    }, 1000)
+    selectSubTopic.value = ''
+    console.log(selectTopic.value)
 })
 watch(selectSubTopic, (oldValue, newValue) => {
     // boxSearch.value = ''
     // page.value = 0
     // limit.value = 10
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+        loadLayout()
+    }, 1000)
 })
 const newChatSocketIo = () => {
     socket.connect();
