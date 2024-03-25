@@ -1,0 +1,9 @@
+@import './base.css';
+input{
+  padding: 7px 10px;
+  color: gray;
+}
+input:focus{
+  outline:1px solid rgba(128, 128, 128, 0.486);
+}
+

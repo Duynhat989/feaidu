@@ -1,0 +1,53 @@
+<script setup>
+import navBarView from '@/components/chat/navBar.vue'
+import aboutView from '@/components/about/Index.vue'
+import payView from '@/components/pay/Index.vue'
+import contactView from '@/components/contact/Index.vue'
+import roomView from '@/components/chat/Room.vue'
+import { ref } from 'vue';
+
+const isShowAbout = ref(false)
+const isShowPay = ref(false)
+const isShowContact = ref(false)
+
+const navBarTab = ref(false)
+
+
+</script>
+
+<template>
+  <main class="main flex">
+    <div class="in-out">
+            <button class="in-out-btn" @click="navBarTab = !navBarTab">
+                <i v-if="navBarTab" class='bx bxs-left-arrow-circle' style='color: rgb(30 107 90 / 84%)'></i>
+                <i v-else class='bx bxs-right-arrow-circle' style='color: rgb(30 107 90 / 84%)'></i>
+            </button>
+        </div>
+        <navBarView v-if="navBarTab" @update:openAbout="isShowAbout = true" @update:openPay="isShowPay = true" @update:openContact="isShowContact = true"/>
+     <div class="nav-chat">
+        <roomView />
+     </div>
+  </main>
+  <aboutView v-if="isShowAbout" @update:closeAbout="isShowAbout = false"/>
+  <payView v-if="isShowPay" @update:closePay="isShowPay = false"/>
+  <contactView v-if="isShowContact" @update:openContact="isShowContact = false"/>
+</template>
+<style scoped>
+.main{
+  position: relative;
+}
+.in-out {
+    position: absolute;
+    left: 7px;
+    top: 10px;
+    z-index: 9999;
+}
+
+.in-out-btn {
+    border: none;
+    font-size: 1.9em;
+    background: none;
+    cursor: pointer;
+}
+
+</style>
