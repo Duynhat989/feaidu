@@ -94,7 +94,7 @@ const addList = ref({})
 onMounted(async () => {
     // data.value = props.data
     // console.log(data.value)
-    var assets = await request.post(`assets.php`, {})
+    var assets = await request.post(`api/assets.php`, {})
     lstButton.value = assets.data
     console.log(lstButton.value)
     favorites.value = lstButton.value.favorites

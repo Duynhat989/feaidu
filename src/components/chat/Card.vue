@@ -144,7 +144,7 @@ const addYeuthich = async (idCard,event) => {
     Favorites.value = true
     event.preventDefault();
     event.stopPropagation();
-    var res = await request.get(`addYeuThich.php?key=${API_KEY.value}&idCard=${idCard}`, {
+    var res = await request.get(`api/addYeuThich.php?key=${API_KEY.value}&idCard=${idCard}`, {
         key: API_KEY.value
     })
 }
@@ -152,7 +152,7 @@ const deleteYeuthich = async (idCard,event) => {
     Favorites.value = false
     event.preventDefault();
     event.stopPropagation();
-    var res = await request.get(`deleteYeuThich.php?key=${API_KEY.value}&idCard=${idCard}`, {
+    var res = await request.get(`api/deleteYeuThich.php?key=${API_KEY.value}&idCard=${idCard}`, {
         key: API_KEY.value
     })
 }
@@ -160,7 +160,7 @@ const addLike = async (idCard,event) => {
     ListLike.value = true
     event.preventDefault();
     event.stopPropagation();
-    var res = await request.get(`addLike.php?key=${API_KEY.value}&idCard=${idCard}`, {
+    var res = await request.get(`api/addLike.php?key=${API_KEY.value}&idCard=${idCard}`, {
         key: API_KEY.value
     })
 }
@@ -168,7 +168,7 @@ const deleteLike = async (idCard,event) => {
     ListLike.value = false
     event.preventDefault();
     event.stopPropagation();
-    var res = await request.get(`addLike.php?key=${API_KEY.value}&idCard=${idCard}`, {
+    var res = await request.get(`api/addLike.php?key=${API_KEY.value}&idCard=${idCard}`, {
         key: API_KEY.value
     })
 }

@@ -71,7 +71,7 @@ const selectPhongCach = ref('')
 const API_KEY = ref('')
 
 const loadNgonNgu = async () => {
-    var res = await request.post(`getType.php?type=NgonNgu`, {
+    var res = await request.post(`api/getType.php?type=NgonNgu`, {
         key: API_KEY.value
     })
     for (const item of res.data.data) {
@@ -82,7 +82,7 @@ const loadNgonNgu = async () => {
     selectLanguages.value = 'Tiếng Việt'
 }
 const loadGiongDieu = async () => {
-    var res = await request.post(`getType.php?type=GiongDieu`, {
+    var res = await request.post(`api/getType.php?type=GiongDieu`, {
         key: API_KEY.value
     })
     for (const item of res.data.data) {
@@ -93,7 +93,7 @@ const loadGiongDieu = async () => {
     selectVoices.value = 'Thân thiện'
 }
 const loadPhongCach = async () => {
-    var res = await request.post(`getType.php?type=PhongCach`, {
+    var res = await request.post(`api/getType.php?type=PhongCach`, {
         key: API_KEY.value
     })
     for (const item of res.data.data) {

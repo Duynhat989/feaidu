@@ -19,7 +19,7 @@ export const loadInfoFormChatGPT = async (oldChat,selectItem) => {
 }
 const addViewCard = async (idCard) => {
     try {
-        var res = await request.get(`congViewEx.php?idCard=${idCard}`)
+        var res = await request.get(`api/congViewEx.php?idCard=${idCard}`)
     } catch (error) {
 
     }

@@ -127,13 +127,13 @@ window.addEventListener("message", async function (event) {
 
 
 const loadWeb = async () => {
-    var res = await request.post(`getinfoWeb.php?key=${API_KEY.value}`, {
+    var res = await request.post(`api/getinfoWeb.php?key=${API_KEY.value}`, {
         key: API_KEY.value
     })
     infoWeb.value = res.data[0]
 }
 const loadTopic = async () => {
-    var res = await request.post(`getType.php?type=ChuDe`, {
+    var res = await request.post(`api/getType.php?type=ChuDe`, {
         key: API_KEY.value
     })
     for (const item of res.data.data) {
@@ -148,7 +148,7 @@ watch(selectTopic, (oldValue, newValue) => {
     loadSubTopics()
 })
 const loadSubTopics = async () => {
-    var res = await request.post(`getSubChuDe.php`, {
+    var res = await request.post(`api/getSubChuDe.php`, {
         chuDe: selectTopic.value
     })
     if (res.data.data) {
@@ -160,6 +160,19 @@ const loadSubTopics = async () => {
     }
     selectSubTopic.value = ''
 }
+const loadTopicsPic = async () => {
+    Topics.value = []
+    var res = await request.get(`dalle/getPromptType.php?type=chuDe`)
+    for (const item of res.data.data) {
+        if (item.chuDe.length > 2) {
+            console.log(item.chuDe)
+            Topics.value.push({
+                ChuDe:item.chuDe
+            })
+        }
+    }
+    selectTopic.value = ''
+}
 const Yeuthich = ref([])
 const LstLike = ref([])
 const Total = ref(0)
@@ -167,7 +180,7 @@ const txtSearchBox = ref('')
 const loadLayout = async () => {
     isLoading.value = true
     FillterPromts.value = []
-    let url = `getPromtList.php?key=${API_KEY.value}&page=${page.value}&typeAI=${typeDesign.value}`
+    let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value}&typeAI=${typeDesign.value}`
     if (folderSelect.value == 2) {
         url += "&yeuthich=on"
     }
@@ -198,7 +211,7 @@ watch(txtSearchBox, (oldValue, newValue) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
         loadLayout()
-    }, 1000)
+    }, 500)
 })
 function generateToken() {
     var timestamp = Math.floor(Date.now() / 1000).toString();
@@ -230,7 +243,7 @@ watch(selectTopic, (oldValue, newValue) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
         loadLayout()
-    }, 1000)
+    }, 500)
     selectSubTopic.value = ''
     console.log(selectTopic.value)
 })
@@ -241,7 +254,7 @@ watch(selectSubTopic, (oldValue, newValue) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
         loadLayout()
-    }, 1000)
+    }, 500)
 })
 const newChatSocketIo = () => {
     socket.connect();
@@ -296,9 +309,16 @@ watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
     if (typeDesign.value == 1) {
         document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...')
+        
     } else {
         document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...')
     }
+    loadTopicsPic()
+    isShowPromit.value = true
+    listMessage.value = []
+    newSessionId.value = generateToken()
+    newChatSocketIo()
+    console.log('22323')
     loadLayout()
 })
 onMounted(() => {

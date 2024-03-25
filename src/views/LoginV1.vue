@@ -283,11 +283,11 @@ const handleLogin = async () => {
     const formData = new FormData();
     formData.append('user', email.value)
     formData.append('pass', pasw.value)
-    var res = await request.post('log_acc.php', formData)
+    var res = await request.post('api/log_acc.php', formData)
     if (res.data.status == "success") {
         await localStorage.setItem('user', JSON.stringify(res.data))
         await localStorage.setItem('AIDU_key', res.data.key)
-        var as = await request.post(`info.php?key=${res.data.key}`, {
+        var as = await request.post(`api/info.php?key=${res.data.key}`, {
             key: res.data.key
         })
         localStorage.setItem('info', JSON.stringify(as.data))
@@ -305,11 +305,11 @@ const handleRegister = async () => {
     formData.append('mail', user.value)
     formData.append('pass', pasw.value)
     formData.append('maGioiThieu', maGioiThieu.value)
-    var res = await request.post('reg_acc.php', formData)
+    var res = await request.post('api/reg_acc.php', formData)
     if (res.data.status == "success") {
         await localStorage.setItem('user', JSON.stringify(res.data))
         await localStorage.setItem('AIDU_key', res.data.key)
-        var as = await request.post(`info.php?key=${res.data.key}`, {
+        var as = await request.post(`api/info.php?key=${res.data.key}`, {
             key: res.data.key
         })
         localStorage.setItem('info', JSON.stringify(as.data))

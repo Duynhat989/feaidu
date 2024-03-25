@@ -71,7 +71,7 @@ const selectPhongCach = ref('')
 const API_KEY = ref('')
 
 const loadNgonNgu = async () => {
-    var res = await request.post(`getType.php?type=all`, {
+    var res = await request.post(`api/getType.php?type=all`, {
         key: API_KEY.value
     })
     for (const item of res.data.data) {

@@ -18,7 +18,7 @@ const packLsts = ref()
 const designForm = ref(1)
 const isLoading = ref(false)
 const loadPacks = async () => {
-    var res = await request.get(`web/index.php?key=${infoUser.value.key}&action=pack_list_all`)
+    var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=pack_list_all`)
     packLsts.value = res.data.data
     console.log(packLsts.value)
 }
@@ -26,7 +26,7 @@ const payPack = async (id) => {
     isLoading.value = true
     let data = new FormData();
     data.append('id', id);
-    var res = await request.post(`web/index.php?key=${infoUser.value.key}&action=get_pack_details`, data)
+    var res = await request.post(`api/web/index.php?key=${infoUser.value.key}&action=get_pack_details`, data)
     setTimeout(() => {
         designForm.value = 2
         isLoading.value = false
