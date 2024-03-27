@@ -13,6 +13,7 @@
     "clipboard": "^2.0.11",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
+    "fingerprintjs2": "^2.1.4",
     "socketio": "^1.0.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",

@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, watch, reactive, computed, onUnmounted } from 'vue';
 import defaultView from '@/components/chat/Default.vue'
+import defaultImageView from '@/components/chat/DefaultImage.vue'
 import headerView from '@/components/chat/Header.vue'
 import cardView from '@/components/chat/Card.vue'
 import containView from '@/components/chat/Contain.vue'
@@ -68,25 +69,26 @@ const sendMessage = async () => {
         role: "assistant",
         content: ''
     })
-    if (selectItem) {
-        socket.emit('message', {
-            type: 'text',
-            id_object: newSessionId.value,
-            message: newMess,
-            realtext: textMesg,
-            typeAI: typeDesign.value,
-            id_user: infoUser.value.id
-        });
-    } else {
-        socket.emit('message', {
-            type: 'text',
-            id_object: newSessionId.value,
-            message: textMesg,
-            realtext: textMesg,
-            typeAI: typeDesign.value,
-            id_user: infoUser.value.id
-        });
+    var data = {
+        type: 'text',
+        id_object: newSessionId.value,
+        message: textMesg,
+        realtext: textMesg,
+        typeAI: typeDesign.value,
+        id_user: infoUser.value.id,
+        fingerprint: localStorage.getItem('fingerprint_device'),
+        mail: infoUser.value.mail,
     }
+    if (selectItem) {
+        data.message = newMess
+    }
+    if (typeDesign.value == 1) {
+        const size = document.querySelector('#idKichThuoc')
+        if (size) {
+            data.size = size.value
+        }
+    }
+    socket.emit('message', data);
     chooseItem(ItemSelect)
     textMessage.value = ''
     setTimeout(() => {
@@ -101,7 +103,6 @@ socket.on('join_room', (previous_message) => {
     if (JSON.parse(previous_message.messages).length > 0) {
         isShowPromit.value = false
         listMessage.value = JSON.parse(previous_message.messages)
-        console.log(listMessage.value)
     }
 });
 socket.on('message_reply', (message) => {
@@ -117,7 +118,14 @@ socket.on('new_history', (historys) => {
     localStorage.setItem('tabhistory', historys)
     window.postMessage('reload_history', window.location.href);
 });
-
+socket.on('fingerprint', (fingerprint) => {
+    if(fingerprint.fingerprint != localStorage.getItem('fingerprint_device')){
+        console.log("OKOk",fingerprint)
+        localStorage.clear();
+        location.reload()
+    }
+    console.log("OK",fingerprint)
+});
 socket.on('connect_error', (error) => {
     console.error("Failed to connect to Socket.IO server from localhost:", error);
 });
@@ -130,6 +138,24 @@ window.addEventListener("message", async function (event) {
         socket.disconnect()
         newChatSocketIo()
     }
+    if (res.active == "clear") {
+        var data = {
+            type_delete: 2,
+            id_user: infoUser.value.id,
+            id_object: 1,
+        }
+        socket.emit('clear_chat', data);
+        this.location.reload()
+    }
+    if (res.active == "clear_room") {
+        var data = {
+            type_delete: 1,
+            id_user: infoUser.value.id,
+            id_object:res.data,
+        }
+        socket.emit('clear_chat', data);
+    }
+
 }, false
 )
 
@@ -253,7 +279,6 @@ watch(selectTopic, (oldValue, newValue) => {
         loadLayout()
     }, 500)
     selectSubTopic.value = ''
-    console.log(selectTopic.value)
 })
 watch(selectSubTopic, (oldValue, newValue) => {
     // boxSearch.value = ''
@@ -268,7 +293,9 @@ const newChatSocketIo = () => {
     socket.connect();
     socket.emit('join_room', {
         id_object: newSessionId.value,
-        id_user: infoUser.value.id
+        id_user: infoUser.value.id,
+        fingerprint: localStorage.getItem('fingerprint_device'),
+        mail: infoUser.value.mail,
     });
 }
 const resetLoad = () => {
@@ -472,6 +499,8 @@ onUnmounted(() => {
                                             <div class="show">
                                                 <img class="show_image_render" :src="item.content.data[0].url || ''"
                                                     alt="">
+                                                <a target="_blank" :href="item.content.data[0].url || ''"
+                                                    class="download"><i class='bx bx-download'></i></a>
                                             </div>
                                         </span>
                                         <span v-else>
@@ -491,8 +520,9 @@ onUnmounted(() => {
             <div class="input-chat">
                 <div class="input-chat__content">
                     <containView v-if="selectItem" :config="selectItem" @update:removeSelect="selectItem = null" />
-                    <div class="more-input" v-if="typeDesign == 0">
-                        <defaultView v-if="API_KEY" :APIKEY="API_KEY" />
+                    <div class="more-input">
+                        <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />
+                        <defaultImageView v-if="typeDesign == 1" :APIKEY="API_KEY" />
                     </div>
                     <div class="chat-input flex">
                         <textarea type="text" id="user-input" class="text-input" rows="1"
@@ -587,6 +617,21 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
+.show {
+    position: relative;
+}
+
+.download {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: black;
+    color: #f7f7f7;
+    display: block;
+    padding: 0px 5px;
+    border-radius: 5px;
+}
+
 .center {
     min-height: 100vh;
     margin: auto;

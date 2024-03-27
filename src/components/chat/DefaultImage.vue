@@ -34,12 +34,14 @@ select {
 <template>
     <div class="formLang flex" v-if="API_KEY.length > 10">
         <div class="select-data">
-            <label for="idLanguage">Ngôn ngữ</label>
-            <select :id="`idLanguage`" v-model="selectLanguages">
-                <option v-for="(item, index) of Languages" :value="item.NgonNgu">{{ item.NgonNgu }}</option>
+            <label for="idKichThuoc">Kích thước</label>
+            <select :id="`idKichThuoc`" v-model="selectSize">
+                <option value="1024x1024">1024x1024</option>
+                <option value="1792x1024">1792x1024</option>
+                <option value="1024x1792">1024x1792</option>
             </select>
         </div>
-        <div class="select-data">
+        <!-- <div class="select-data">
             <label for="idVoice">Giọng điệu</label>
             <select :id="`idVoice`" v-model="selectVoices">
                 <option v-for="(item, index) of Voices" :value="item.GiongDieu">{{ item.GiongDieu }}</option>
@@ -50,7 +52,7 @@ select {
             <select :id="`PhongCachs`" v-model="selectPhongCach">
                 <option v-for="(item, index) of PhongCachs" :value="item.PhongCach">{{ item.PhongCach }}</option>
             </select>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup>
@@ -59,6 +61,7 @@ const props = defineProps(['APIKEY']);
 import request from '@/utils/request'
 //khai báo biến
 const Languages = ref([])
+const selectSize = ref('1024x1024')
 const selectLanguages = ref('')
 
 const Voices = ref([])
@@ -70,46 +73,46 @@ const selectPhongCach = ref('')
 
 const API_KEY = ref('')
 
-const loadNgonNgu = async () => {
-    var res = await request.post(`api/getType.php?type=NgonNgu`, {
-        key: API_KEY.value
-    })
-    for (const item of res.data.data) {
-        if (item.NgonNgu.length > 2) {
-            Languages.value.push(item)
-        }
-    }
-    selectLanguages.value = 'Tiếng Việt'
-}
-const loadGiongDieu = async () => {
-    var res = await request.post(`api/getType.php?type=GiongDieu`, {
-        key: API_KEY.value
-    })
-    for (const item of res.data.data) {
-        if (item.GiongDieu.length > 2) {
-            Voices.value.push(item)
-        }
-    }
-    selectVoices.value = 'Thân thiện'
-}
-const loadPhongCach = async () => {
-    var res = await request.post(`api/getType.php?type=PhongCach`, {
-        key: API_KEY.value
-    })
-    for (const item of res.data.data) {
-        if (item.PhongCach.length > 2) {
-            PhongCachs.value.push(item)
-        }
-    }
-    selectPhongCach.value = 'Sáng tạo'
-}
+// const loadNgonNgu = async () => {
+//     var res = await request.post(`api/getType.php?type=NgonNgu`, {
+//         key: API_KEY.value
+//     })
+//     for (const item of res.data.data) {
+//         if (item.NgonNgu.length > 2) {
+//             Languages.value.push(item)
+//         }
+//     }
+//     selectLanguages.value = 'Tiếng Việt'
+// }
+// const loadGiongDieu = async () => {
+//     var res = await request.post(`api/getType.php?type=GiongDieu`, {
+//         key: API_KEY.value
+//     })
+//     for (const item of res.data.data) {
+//         if (item.GiongDieu.length > 2) {
+//             Voices.value.push(item)
+//         }
+//     }
+//     selectVoices.value = 'Thân thiện'
+// }
+// const loadPhongCach = async () => {
+//     var res = await request.post(`api/getType.php?type=PhongCach`, {
+//         key: API_KEY.value
+//     })
+//     for (const item of res.data.data) {
+//         if (item.PhongCach.length > 2) {
+//             PhongCachs.value.push(item)
+//         }
+//     }
+//     selectPhongCach.value = 'Sáng tạo'
+// }
 const startLoad = async () => {
     API_KEY.value = props.APIKEY
-    if (API_KEY.value.length > 10) {
-        await loadNgonNgu()
-        await loadGiongDieu()
-        await loadPhongCach()
-    }
+    // if (API_KEY.value.length > 10) {
+    //     await loadNgonNgu()
+    //     await loadGiongDieu()
+    //     await loadPhongCach()
+    // }
 }
 onMounted(() => {
     startLoad()

@@ -27,6 +27,17 @@ const oldChat = (item) => {
         data:JSON.stringify(item)
     }, window.location.href);
 }
+const clear = () => {
+    window.postMessage({
+        active:'clear'
+    }, window.location.href);
+}
+const clear_room = (id_object) => {
+    window.postMessage({
+        active:'clear_room',
+        data:id_object
+    }, window.location.href);
+}
 window.addEventListener(
 "message",
 async function (event) {
@@ -47,7 +58,7 @@ onMounted(async () => {
                 <button class="chat-new" @click="newChat">
                     <i class='bx bx-plus'></i> New chat
                 </button>
-                <button class="chat-clear"><i class='bx bx-trash'></i></button>
+                <button @click="clear()" class="chat-clear"><i class='bx bx-trash'></i></button>
             </div>
             <div class="chat-history">
                 <ul class="list">
@@ -55,8 +66,7 @@ onMounted(async () => {
                         <div class="icon">
                             <i class='bx bx-message-square-dots'></i>&ensp;
                         </div> <a>{{ item.title }}</a>
-                        <div class="edit"><i class='bx bx-edit-alt'></i>&ensp;<i
-                                class='bx bx-dots-horizontal-rounded'></i></div>
+                        <div class="edit" @click="clear_room(item.id_object)"><i class='bx bx-trash' ></i></div>
                     </li>
                 </ul>
             </div>
