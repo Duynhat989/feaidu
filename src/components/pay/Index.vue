@@ -2,7 +2,7 @@
 import itemView from '@/components/pay/Item.vue'
 import store from '@/stores';
 import request from '@/utils/request';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 
 
 
@@ -40,8 +40,62 @@ const formatVnd = (number) => {
     });
     return formattedCurrency
 }
+//load địa chỉ 
+const lstProvince = ref([])
+const lstDistrict = ref([])
+const lstWard = ref([])
+const selectProvince = ref('')
+const selectDistrict = ref('')
+const selectWard = ref('')
+const loadProvince = async () => {
+    var pere = await fetch('https://vapi.vnappmob.com/api/province/')
+    var res = await pere.json()
+    for (const iterator of res.results) {
+        lstProvince.value.push({
+            name: iterator.province_name,
+            id:iterator.province_id
+        })
+    }
+}
+watch(selectProvince,async (oldValue,newValue) => {
+    var foundElements = await lstProvince.value.filter(function(element) {
+        return element.name === selectProvince.value;
+    });
+    var pere = await fetch('https://vapi.vnappmob.com/api/province/district/'+foundElements[0].id)
+    var res = await pere.json()
+    for (const iterator of res.results) {
+        lstDistrict.value.push({
+            name: iterator.district_name,
+            id:iterator.district_id
+        })
+    }
+})
+watch(selectDistrict,async (oldValue,newValue) => {
+    var foundElements =await  lstDistrict.value.filter(function(element) {
+        return element.name === selectDistrict.value;
+    });
+    var pere = await fetch('https://vapi.vnappmob.com/api/province/ward/'+foundElements[0].id)
+    var res = await pere.json()
+    for (const iterator of res.results) {
+        lstWard.value.push({
+            name: iterator.ward_name,
+            id:iterator.ward_id
+        })
+    }
+})
+
+const moneyVnd = ref(50000)
+const qrLink = ref(``)
+watch(moneyVnd,(OlaValue,NewValue)=>{
+    qrLink.value = `https://img.vietqr.io/image/ACB-14497281-compact2.jpg?amount=${moneyVnd.value}&addInfo=NAP1999${infoUser.value.id}&accountName=DINH VIET DUY`
+})
+onMounted(() => {
+    qrLink.value = `https://img.vietqr.io/image/ACB-14497281-compact2.jpg?amount=${moneyVnd.value}&addInfo=NAP1999${infoUser.value.id}&accountName=DINH VIET DUY`
+})
+
 onMounted(() => {
     loadPacks()
+    loadProvince()
 })
 </script>
 <template>
@@ -74,24 +128,24 @@ onMounted(() => {
                         <label for="">Số điện thoại</label>
                         <input type="text" class="input-text" placeholder="Số điện thoại">
                     </div>
-                    
+
                     <div class="input">
                         <label for="">Tỉnh/Thành phố</label>
-                        <select name="" id="">
-                            <option value="1">1</option>
+                        <select name="" id="" v-model="selectProvince">
+                            <option v-for="item of lstProvince" :value="item.name">{{ item.name }}</option>
                         </select>
                     </div>
-                    
+
                     <div class="input">
                         <label for="">Quận/Huyện</label>
-                        <select name="" id="">
-                            <option value="1">1</option>
+                        <select name="" id="" v-model="selectDistrict">
+                            <option v-for="item of lstDistrict" :value="item.name">{{ item.name }}</option>
                         </select>
                     </div>
                     <div class="input">
                         <label for="">Xã/Phường</label>
-                        <select name="" id="">
-                            <option value="1">1</option>
+                        <select name="" id="" v-model="selectWard">
+                            <option v-for="item of lstWard" :value="item.name">{{ item.name }}</option>
                         </select>
                     </div>
                     <div class="input">
@@ -101,9 +155,29 @@ onMounted(() => {
                     </div>
                     <div class="payment">
                         <h5>Chi phí đăng ký: <span>{{ formatVnd(345345) }}</span></h5>
-                        <h5>Áp mã khuyễn mãi:  <span>{{ formatVnd(0) }}</span></h5>
-                        <h5>Tổng tiền cần thanh toán:  <span class="total">{{ formatVnd(345345) }}</span></h5>
+                        <h5>Áp mã khuyễn mãi: <span>{{ formatVnd(0) }}</span></h5>
+                        <h5>Tổng tiền cần thanh toán: <span class="total">{{ formatVnd(345345) }}</span></h5>
 
+                    </div>
+                    <div class="pay">
+                        <button class="btn-pay">Thanh toán ngay</button>
+                    </div>
+                </div>
+            </div>
+            <div class="content" v-if="designForm == 3">
+                <a @click="designForm = 1"><i class='bx bx-arrow-back'></i> Back</a>
+                <div class="title">
+                    <h3>Thanh toán bằng chuyển khoản</h3>
+                </div>
+                <h4>Xử lý thanh toán</h4>
+                <div class="form-pay">
+                    <div class="input">
+                        <label for="">Tên khách hàng</label>
+                        <input type="text" class="input-text" placeholder="Tên khách hàng">
+                    </div>
+                    <div class="input">
+                        <label for="">Số điện thoại</label>
+                        <input type="text" class="input-text" placeholder="Số điện thoại">
                     </div>
                     <div class="pay">
                         <button class="btn-pay">Thanh toán ngay</button>
@@ -121,19 +195,22 @@ onMounted(() => {
     </div>
 </template>
 <style scoped>
-.payment{
+.payment {
     font-size: 16px;
     margin: 10px 0px;
     line-height: 25px;
 }
-.payment .total{
+
+.payment .total {
     font-size: 18px;
     color: red;
 }
-.payment span{
+
+.payment span {
     font-weight: 600;
 }
-.btn-pay{
+
+.btn-pay {
     border: none;
     padding: 8px 15px;
     margin-top: 6px;
@@ -143,11 +220,14 @@ onMounted(() => {
     border-radius: 5px;
     transition: all 1s;
 }
-.btn-pay:hover{
+
+.btn-pay:hover {
     transform: scale(1.01);
-    background: rgb(91, 155, 91);;
+    background: rgb(91, 155, 91);
+    ;
 }
-.apply_discount{
+
+.apply_discount {
     border-radius: 5px;
     border: none;
     padding: 6px 8px;
@@ -156,20 +236,29 @@ onMounted(() => {
     color: white;
     cursor: pointer;
 }
-.input{
+
+.input {
     margin-bottom: 5px;
 }
-input{
+
+input {
     width: 100%;
     border: 1px solid rgba(128, 128, 128, 0.329);
     border-radius: 6px;
+    padding: 7px 10px;
+    color: gray;
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px
 }
-select{
+
+select {
     width: 100%;
     border: 1px solid rgba(128, 128, 128, 0.329);
     border-radius: 6px;
     padding: 6px 10px;
 }
+
 .loading {
     position: absolute;
     top: 0;

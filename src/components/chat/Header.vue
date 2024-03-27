@@ -26,7 +26,7 @@
     <div class="header" v-if="config.avata_AI">
         <div class="icon-header">
             <div class="icon">
-                <img width="188" height="84" :src="`https://api.ailab.com.vn/images/logo/`">
+                <img width="188" height="84" :src="domain" placeholder="logo aidu">
             </div>
         </div>
     </div>
@@ -39,6 +39,5 @@ import { ref } from 'vue'
 const props = defineProps(['config']);
 
 const config = ref(props.config)
-
-
+const domain = ref(import.meta.env.VITE_API_URL + `images/troly.aidu.com.vn.png`)
 </script>

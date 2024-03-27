@@ -74,6 +74,7 @@ const sendMessage = async () => {
             id_object: newSessionId.value,
             message: newMess,
             realtext: textMesg,
+            typeAI: typeDesign.value,
             id_user: infoUser.value.id
         });
     } else {
@@ -82,6 +83,7 @@ const sendMessage = async () => {
             id_object: newSessionId.value,
             message: textMesg,
             realtext: textMesg,
+            typeAI: typeDesign.value,
             id_user: infoUser.value.id
         });
     }
@@ -99,12 +101,17 @@ socket.on('join_room', (previous_message) => {
     if (JSON.parse(previous_message.messages).length > 0) {
         isShowPromit.value = false
         listMessage.value = JSON.parse(previous_message.messages)
+        console.log(listMessage.value)
     }
 });
 socket.on('message_reply', (message) => {
-    listMessage.value[listMessage.value.length - 1].content += message.text
-    renderMessage.value = !message.finish
-    autoScroll()
+    try {
+        message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content += message.text
+        renderMessage.value = !message.finish
+        autoScroll()
+    } catch (error) {
+
+    }
 });
 socket.on('new_history', (historys) => {
     localStorage.setItem('tabhistory', historys)
@@ -118,6 +125,7 @@ window.addEventListener("message", async function (event) {
     var res = event.data
     if (res.active == "old_chat") {
         var item = JSON.parse(res.data)
+        typeDesign.value = item.typeAI
         newSessionId.value = item.id_object
         socket.disconnect()
         newChatSocketIo()
@@ -133,6 +141,7 @@ const loadWeb = async () => {
     infoWeb.value = res.data[0]
 }
 const loadTopic = async () => {
+    Topics.value = []
     var res = await request.post(`api/getType.php?type=ChuDe`, {
         key: API_KEY.value
     })
@@ -165,9 +174,8 @@ const loadTopicsPic = async () => {
     var res = await request.get(`dalle/getPromptType.php?type=chuDe`)
     for (const item of res.data.data) {
         if (item.chuDe.length > 2) {
-            console.log(item.chuDe)
             Topics.value.push({
-                ChuDe:item.chuDe
+                ChuDe: item.chuDe
             })
         }
     }
@@ -309,16 +317,15 @@ watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
     if (typeDesign.value == 1) {
         document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...')
-        
+        loadTopicsPic()
     } else {
         document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...')
+        loadTopic()
     }
-    loadTopicsPic()
     isShowPromit.value = true
     listMessage.value = []
     newSessionId.value = generateToken()
     newChatSocketIo()
-    console.log('22323')
     loadLayout()
 })
 onMounted(() => {
@@ -345,13 +352,14 @@ const next = async (numbe) => {
         }
     }
 }
+
 const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
 })
 </script>
 <template>
-    <div :class="isShowRight ? 'room flex' : 'room'">
+    <div :class="isShowRight ? 'room flex view' : 'room'">
         <div class="center">
             <div class="main-content">
                 <div class="list-content">
@@ -385,7 +393,7 @@ onUnmounted(() => {
                             </div>
                         </div>
                         <div class="dir">
-                            <div class="dir-center">
+                            <div class="dir-center" v-if="Topics.length > 0">
                                 <ul class="topic flex-new">
                                     <li :class="'' == selectTopic ? `topic-item color` : `topic-item`"
                                         @click="selectTopic = ''">Tất cả</li>
@@ -455,9 +463,21 @@ onUnmounted(() => {
                                     <!-- <span  v-if="item.content.length > 0" v-html="formatCode(item.content)">
                                         <i class='bx bx-pencil bx-spin' ></i><i class='' ></i>
                                     </span> -->
-                                    <span v-if="item.content.length > 0" class="copy-button"
+                                    <span v-if="item.content.data || item.content.length > 0" class="copy-button"
                                         style="white-space: pre-wrap;overflow-wrap: break-word;">
-                                        {{ item.content }} <i v-if="index == listMessage.length - 1 && renderMessage"
+                                        <span v-if="typeof item.content == 'object'">
+                                            <div class="content">
+                                                {{ item.content.data[0].revised_prompt || item.content }}
+                                            </div>
+                                            <div class="show">
+                                                <img class="show_image_render" :src="item.content.data[0].url || ''"
+                                                    alt="">
+                                            </div>
+                                        </span>
+                                        <span v-else>
+                                            {{ item.content }}
+                                        </span>
+                                        <i v-if="index == listMessage.length - 1 && renderMessage"
                                             class='bx bxs-circle bx-flashing'></i>
                                     </span>
                                     <span v-else><i class='bx bx-loader bx-spin'></i></span>
@@ -554,7 +574,7 @@ onUnmounted(() => {
                     <button class="btn-paging" @click="next(1)"><i class='bx bx-chevron-right'></i></button>
                 </div>
             </div>
-            <div class="promt-list flex-new" v-if="!isLoading">
+            <div class="promt-list flex" v-if="!isLoading">
                 <cardView v-for="(item, index) of FillterPromts" :key="index" :data="item" @click="chooseItem(item)"
                     :API_KEY="API_KEY" :yeuthich="Yeuthich" :like="LstLike" />
             </div>
@@ -567,6 +587,24 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
+.center {
+    min-height: 100vh;
+    margin: auto;
+    padding: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.view .center {
+    width: calc(100% - 389px);
+}
+
+.show_image_render {
+    width: 100%;
+    max-width: 512px;
+    margin: 0 auto;
+}
+
 .paging-content span {
     font-size: 12px !important;
 }
@@ -611,6 +649,10 @@ onUnmounted(() => {
         background: white;
         width: 90%;
         right: 0;
+    }
+
+    .view .center {
+        width: calc(100%);
     }
 }
 
@@ -831,10 +873,9 @@ ul {
     justify-content: center;
 }
 
-.center {
-    min-height: 100vh;
-    margin: auto;
-    padding: 10px;
+.flex-new-1 {
+    display: flex;
+    justify-content: center;
 }
 
 .main-top {

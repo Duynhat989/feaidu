@@ -23,8 +23,11 @@
 .input-group img {
     margin: auto;
 }
-
-.login-form input {
+.input{
+    padding: 7px 10px;
+    color: gray;
+}
+.login-form .input {
     font-size: 16px;
     width: 100%;
     border: 1px solid #d9d9d9;
@@ -72,6 +75,7 @@ label span {
 .flex {
     display: flex;
 }
+
 .orther {
     width: calc(100% / 2);
     font-size: 0.8em;
@@ -111,7 +115,8 @@ label span {
     padding-left: 5px;
     font-size: 13px;
 }
-.saveLabel{
+
+.saveLabel {
     margin-left: 10px;
     cursor: pointer;
     font-size: 14px;
@@ -144,7 +149,8 @@ label span {
                 <label for="save" class="saveLabel"> Lưu đăng nhập</label><br>
             </div>
             <div class="input-group buttons">
-                <button class="button" @click="handleLogin">Đăng nhập <i class='bx bx-loader bx-spin' v-if="spin"></i></button>
+                <button class="button" @click="handleLogin">Đăng nhập <i class='bx bx-loader bx-spin'
+                        v-if="spin"></i></button>
             </div>
             <div class="input-group flex reg">
                 <div class="orther left">
@@ -192,6 +198,7 @@ label span {
                 </div>
                 <input type="text" class="input" id="emailReg" placeholder="" v-model="user">
             </div>
+
             <div class="input-group">
                 <div class="label">
                     <label for="pasw"><span>*</span> Mật khẩu:</label>
@@ -200,13 +207,23 @@ label span {
             </div>
             <div class="input-group">
                 <div class="label">
+                    <label for="email"><span>*</span> Quốc gia</label>
+                </div>
+                <select class="input" name="" id="" v-model="country">
+                    <option value="Vietnam">Vietnam</option>
+                    <option :value="item.name" v-for="(item,index) of lstCountry">{{ item.name }}</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <div class="label">
                     <label for="email"> Mã giới thiệu</label>
                 </div>
-                <input type="text" class="input" id="codeReg" placeholder=""  v-model="maGioiThieu">
+                <input type="text" class="input" id="codeReg" placeholder="" v-model="maGioiThieu">
             </div>
             <!-- //------------- -->
             <div class="input-group buttons">
-                <button class="button" @click="handleRegister">Đăng ký <i class='bx bx-loader bx-spin' v-if="spin"></i></button>
+                <button class="button" @click="handleRegister">Đăng ký <i class='bx bx-loader bx-spin'
+                        v-if="spin"></i></button>
             </div>
             <div class="input-group flex reg">
                 <div class="orther left">
@@ -251,16 +268,18 @@ const pasw = ref('')
 
 const user = ref('')
 const maGioiThieu = ref('')
+const country = ref('')
 
 const notify = ref('')
 
+const lstCountry = ref([])
 
 const load = ref(100)
 const isShow = ref(false)
 
 const spin = ref(false)
 
-const turnOff = (thongbao,reset = false) => {
+const turnOff = (thongbao, reset = false) => {
     notify.value = thongbao
     isShow.value = true
     for (let index = 0; index < 100; index++) {
@@ -268,7 +287,7 @@ const turnOff = (thongbao,reset = false) => {
             load.value = 100 - index
             if (index == 99) {
                 isShow.value = false
-                if(reset){
+                if (reset) {
                     window.location.reload()
                 }
             }
@@ -291,7 +310,7 @@ const handleLogin = async () => {
             key: res.data.key
         })
         localStorage.setItem('info', JSON.stringify(as.data))
-        turnOff('Đăng nhập thành công. Đang chuyển hướng!',true)
+        turnOff('Đăng nhập thành công. Đang chuyển hướng!', true)
 
     } else {
         turnOff(res.data.message)
@@ -304,18 +323,11 @@ const handleRegister = async () => {
     formData.append('user', email.value)
     formData.append('mail', user.value)
     formData.append('pass', pasw.value)
+    formData.append('country', country.value)
     formData.append('maGioiThieu', maGioiThieu.value)
     var res = await request.post('api/reg_acc.php', formData)
     if (res.data.status == "success") {
-        await localStorage.setItem('user', JSON.stringify(res.data))
-        await localStorage.setItem('AIDU_key', res.data.key)
-        var as = await request.post(`api/info.php?key=${res.data.key}`, {
-            key: res.data.key
-        })
-        localStorage.setItem('info', JSON.stringify(as.data))
-        turnOff('Đăng nhập thành công. Đang chuyển hướng!')
-        loadingCookie(res.data.key)
-        console.log("Xinchào",res.data.key)
+        handleLogin()
         setTimeout(() => {
             emit('update:loginForm')
         }, 2000)
@@ -325,11 +337,25 @@ const handleRegister = async () => {
     }
     spin.value = false
 }
+const loadCountry = async () => {
+    if (lstCountry.value.length == 0) {
+        var pere = await fetch('https://restcountries.com/v3.1/all')
+        var res = await pere.json()
+        for (const iterator of res) {
+            lstCountry.value.push({
+                name:iterator.name.common,
+                cca2:iterator.cca2,
+                cca3:iterator.cca3,
+            })
+        }
+    }
+}
 onMounted(async () => {
     // await logOutCookie()
     var API_KEY = await localStorage.getItem('AIDU_key') || ''
     if (API_KEY) {
-       emit('update:loginForm');
+        emit('update:loginForm');
     }
+    loadCountry()
 })
 </script>
