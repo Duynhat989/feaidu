@@ -96,9 +96,6 @@ const sendMessage = async () => {
         autoScroll()
     }, 150)
 };
-socket.on('message', (message) => {
-    console.log('message', message)
-});
 socket.on('join_room', (previous_message) => {
     if (JSON.parse(previous_message.messages).length > 0) {
         isShowPromit.value = false
@@ -119,12 +116,10 @@ socket.on('new_history', (historys) => {
     window.postMessage('reload_history', window.location.href);
 });
 socket.on('fingerprint', (fingerprint) => {
-    if(fingerprint.fingerprint != localStorage.getItem('fingerprint_device')){
-        console.log("OKOk",fingerprint)
+    if (fingerprint.fingerprint != localStorage.getItem('fingerprint_device')) {
         localStorage.clear();
         location.reload()
     }
-    console.log("OK",fingerprint)
 });
 socket.on('connect_error', (error) => {
     console.error("Failed to connect to Socket.IO server from localhost:", error);
@@ -151,7 +146,7 @@ window.addEventListener("message", async function (event) {
         var data = {
             type_delete: 1,
             id_user: infoUser.value.id,
-            id_object:res.data,
+            id_object: res.data,
         }
         socket.emit('clear_chat', data);
     }
@@ -315,32 +310,33 @@ const kichData = () => {
 }
 
 const copyText = (textString) => {
-    console.log('Copying text...');
-    const clipboard = new Clipboard('.copy-button', {
-        text: () => textString,
-    });
+    try {
+        const clipboard = new Clipboard('.copy-button', {
+            text: () => textString,
+        });
 
-    clipboard.on('success', (e) => {
-        console.log("done")
-        clipboard.destroy();
-    });
+        clipboard.on('success', (e) => {
+            clipboard.destroy();
+        });
 
-    clipboard.on('error', (e) => {
-        console.error('Unable to copy text', e.trigger);
-        clipboard.destroy();
-    });
+        clipboard.on('error', (e) => {
+            console.error('Unable to copy text', e.trigger);
+            clipboard.destroy();
+        });
 
-    // Kiểm tra xem có phần tử có class .copy-button hay không
-    const copyButton = document.querySelector('.copy-button');
-    if (copyButton) {
-        // Nếu tồn tại, thì mới gọi click()
-        copyButton.click();
-    } else {
-        console.error('Element with class .copy-button not found');
+        // Kiểm tra xem có phần tử có class .copy-button hay không
+        const copyButton = document.querySelector('.copy-button');
+        if (copyButton) {
+            // Nếu tồn tại, thì mới gọi click()
+            copyButton.click();
+        } else {
+            console.error('Element with class .copy-button not found');
+        }
+    } catch (error) {
+
     }
 };
 watch(typeDesign, (oldValue, newValue) => {
-    console.log(typeDesign.value)
     selectItem.value = null
     if (typeDesign.value == 1) {
         document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...')
@@ -533,7 +529,7 @@ onUnmounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="icon-image">
+            <div class="icon-image" v-if="!isShowPromit">
                 <img width="40" height="40" src="https://api.ailab.com.vn/images/ico/t%e1%ba%a3i-xu%e1%bb%91ng-_1_.ico"
                     alt="" @click="isShowRight = !isShowRight">
             </div>

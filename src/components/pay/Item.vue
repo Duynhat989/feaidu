@@ -48,16 +48,19 @@ onMounted(()=>{
                     Chi tiết gói: {{ data.description }}
                 </div>
                 <div class="line status">
-                    Trạng thái: <span>khả dụng</span>
+                    Trạng thái: <span>Khả dụng</span>
                 </div>
             </div>
             <div class="item-sigin">
-                <button @click="payNow(data.id)">Đăng ký ngay</button>
+                <button @click="payNow(data.id)">MUA NGAY</button>
             </div>
         </div>
     </div>
 </template>
 <style scoped>
+.item-detail {
+    min-height:256px;
+}
 .item-detail .line {
     padding: 5px 0;
 }
@@ -80,32 +83,37 @@ onMounted(()=>{
 }
 
 .item-sigin button {
-    padding: 7px 30px;
+    padding: 13px 30px;
+    min-width:150px;
     border-radius: 5px;
     border: none;
-    background-color: white;
     cursor: pointer;
-    transition: all 1s;
+    transition: all 0.3s;
+    background-image: linear-gradient(to right, #2191c6, #505a8b);
+    box-shadow: 6px 10px 2px -2px #808080ad;
+    font-weight: 700;
+    color: white;
 }
 
 .item-sigin button:hover {
     background-color: rgba(0, 255, 255, 0.205);
-    color: white;
+    box-shadow:none;
 }
 
 .item {
-    width: calc(100%/ 4);
+    width: calc(100%/ 3);
     padding: 5px;
 }
 
 .item_content {
-    background-color: rgb(0, 78, 83);
+    background-image: linear-gradient(to right, #5cc8fc, #788fff);
     padding: 10px;
     box-shadow: 2px 3px 6px 2px rgba(179, 173, 173, 0.726);
     transition: all 1s;
     border-radius: 7px;
     color: white;
     font-weight: 500;
+    height:100%;
 }
 
 .item_content:hover {

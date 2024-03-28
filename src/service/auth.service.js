@@ -11,7 +11,6 @@ class AuthService {
       })
       .then((response) => {
         const data = response.data
-        console.log(data)
         if(data.status == "success"){
           localStorage.setItem("user", JSON.stringify(response.data));
           setAuth()
@@ -19,7 +18,6 @@ class AuthService {
         return response.data
       })
       .catch((e) => {
-        console.log(e);
         throw new Error(e);
         
       });

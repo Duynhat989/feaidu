@@ -66,6 +66,5 @@ onMounted(() => {
     inputs.value = JSON.parse(config.value.input || '{}')
     idSelect.value = config.value.id
     try { document.querySelector('#user-input').setAttribute('placeholder',config.value.chat)} catch (error) {}
-    // console.log(config.value)
 })
 </script>
