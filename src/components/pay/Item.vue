@@ -18,7 +18,6 @@ const payNow = (id) => {
 }
 onMounted(()=>{
     data.value = props.config
-    console.log(data.value)
 })
 </script>
 <template>

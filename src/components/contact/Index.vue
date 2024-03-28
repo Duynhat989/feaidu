@@ -6,7 +6,6 @@ import { onMounted, computed, ref, onUnmounted } from 'vue';
 const emit = defineEmits(); // Import emit từ defineEmits
 
 function closeAbout() {
-    console.log('sdfsdf')
     // Sử dụng $emit để gửi dữ liệu qua cho cha thông qua sự kiện custom
     emit('update:openContact');
 }

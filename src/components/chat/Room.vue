@@ -225,11 +225,18 @@ const loadLayout = async () => {
     var res = await request.post(url, {
         key: API_KEY.value
     })
-    Yeuthich.value = res.data.yeuthich
-    LstLike.value = res.data.like
-    FillterPromts.value = res.data.data
-    Total.value = res.data.count
-    isLoading.value = false
+    if(!res.data.status){
+        if(res.data.message.includes('ID người dùng không tồn tại')){
+            localStorage.clear()
+            location.reload()
+        }
+    }else{
+        Yeuthich.value = res.data.yeuthich
+        LstLike.value = res.data.like
+        FillterPromts.value = res.data.data
+        Total.value = res.data.count
+        isLoading.value = false
+    }
     //---------------------------
 }
 watch(folderSelect, (oldValue, newValue) => {
