@@ -46,6 +46,10 @@ async function (event) {
    }
 },
 false);
+
+const user = JSON.parse(localStorage.getItem('user')) || []
+
+
 onMounted(async () => {
     tabhistory.value = JSON.parse(await localStorage.getItem('tabhistory')) || []
 })
@@ -74,7 +78,7 @@ onMounted(async () => {
         <div class="menu-tab">
             <ul class="menu">
                 <li class="menu-item" @click="openPay">
-                    <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp</a>
+                    <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp ({{ user.services[0].pack_title }})</a>
                 </li>
                 <li class="menu-item flex sub-tab">
                     <div class="avata">

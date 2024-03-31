@@ -41,8 +41,8 @@ const navBarTab = ref(false)
 }
 .in-out {
     position: absolute;
-    left: 7px;
-    top: 10px;
+    left: 8px;
+    top: 5px;
     z-index: 9999;
 }
 

@@ -225,12 +225,12 @@ const loadLayout = async () => {
     var res = await request.post(url, {
         key: API_KEY.value
     })
-    if(!res.data.status){
-        if(res.data.message.includes('ID người dùng không tồn tại')){
+    if (!res.data.status) {
+        if (res.data.message.includes('ID người dùng không tồn tại')) {
             localStorage.clear()
             location.reload()
         }
-    }else{
+    } else {
         Yeuthich.value = res.data.yeuthich
         LstLike.value = res.data.like
         FillterPromts.value = res.data.data
@@ -358,6 +358,7 @@ watch(typeDesign, (oldValue, newValue) => {
     newChatSocketIo()
     loadLayout()
 })
+const infoUs = JSON.parse(localStorage.getItem('info')) || []
 onMounted(() => {
     API_KEY.value = infoUser.value.key
     newSessionId.value = generateToken()
@@ -383,6 +384,7 @@ const next = async (numbe) => {
     }
 }
 
+const user = JSON.parse(localStorage.getItem('user')) || []
 const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
@@ -392,6 +394,17 @@ onUnmounted(() => {
     <div :class="isShowRight ? 'room flex view' : 'room'">
         <div class="center">
             <div class="main-content">
+
+                <div class="info-user">
+                    <div class="info-user__content">
+                        <div class="user">
+                            <span><i class='bx bx-envelope' ></i> E-mail: <span style="color: #00cdff;">{{ infoUs.data.taikhoan.mail }}</span> &emsp;</span>
+                        </div>
+                        <div class="pack">
+                            <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;">{{ user.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{ user.services[0].expiry_date }}</span> )
+                        </div>
+                    </div>
+                </div>
                 <div class="list-content">
                     <div class="promits" v-if="isShowPromit">
                         <div class="switch flex">
@@ -620,6 +633,20 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
+.info-user__content {
+    font-size: 13px;
+    background-color: rgb(56, 56, 56);
+}
+
+.info-user__content .pack {
+    font-size: 11px;
+}
+
+.info-user {
+    text-align: center;
+    color: white;
+}
+
 .show {
     position: relative;
 }
@@ -638,9 +665,9 @@ onUnmounted(() => {
 .center {
     min-height: 100vh;
     margin: auto;
-    padding: 10px;
     width: 100%;
     position: relative;
+    padding-top: 0;
 }
 
 .view .center {
