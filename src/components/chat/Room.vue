@@ -401,7 +401,7 @@ onUnmounted(() => {
                             <span><i class='bx bx-envelope' ></i> E-mail: <span style="color: #00cdff;">{{ infoUs.data.taikhoan.mail }}</span> &emsp;</span>
                         </div>
                         <div class="pack">
-                            <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;">{{ user.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{ user.services[0].expiry_date }}</span> )
+                            <i class='bx bx-package'></i> Gói đăng ký:  <span style="color: #00cdff;"> {{ user.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{ user.services[0].expiry_date }}</span> )
                         </div>
                     </div>
                 </div>
@@ -634,12 +634,13 @@ onUnmounted(() => {
 </template>
 <style scoped>
 .info-user__content {
-    font-size: 13px;
+    font-size: 11px;
     background-color: rgb(56, 56, 56);
+    padding: 5px 0;
 }
 
 .info-user__content .pack {
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .info-user {
