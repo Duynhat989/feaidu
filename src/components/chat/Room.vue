@@ -115,10 +115,16 @@ socket.on('new_history', (historys) => {
     window.postMessage('reload_history', window.location.href);
 });
 socket.on('fingerprint',async (fingerprint) => {
+    console.log("Auth:",fingerprint)
     var item = await localStorage.getItem('fingerprint_device') || ''
     if (fingerprint.fingerprint != item) {
-        localStorage.clear();
-        location.reload()
+        if(fingerprint.fingerprint != null || fingerprint.fingerprint != undefined){
+            
+        }else{
+            alert('Tài khảon của bạn đang đăng nhập ở nơi khác')
+            localStorage.clear();
+            location.reload()
+        }
     }
 });
 socket.on('connect_error', (error) => {
