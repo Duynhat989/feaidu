@@ -122,7 +122,7 @@ socket.on('fingerprint',async (fingerprint) => {
         if(fingerprint.fingerprint == null || fingerprint.fingerprint == undefined){
             
         }else{
-            alert('Tài khảon của bạn đang đăng nhập ở nơi khác')
+            alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
             localStorage.clear();
             location.reload()
         }
