@@ -20,7 +20,6 @@ const isLoading = ref(false)
 const loadPacks = async () => {
     var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=pack_list_all`)
     packLsts.value = res.data.data
-    console.log(packLsts.value)
 }
 const payPack = async (id) => {
     isLoading.value = true
@@ -34,7 +33,6 @@ const payPack = async (id) => {
     idPack.value = res.data.data.id
     namePack.value = res.data.data.title
     totalMoney.value = res.data.data.price
-    console.log(res.data)
 }
 const formatVnd = (number) => {
     const formattedCurrency = number.toLocaleString('vi-VN', {
@@ -48,7 +46,6 @@ const onClickDiscound = async () => {
     //kiểm tra mã
     isLoadingDiscount.value = true
     var res = await request.post(`api/web/index.php?action=check_discount&key=${infoUser.value.key}&discount_name=${txtDiscount.value}`,)
-    console.log(res.data)
     if (res.data.status) {
         alert('Add mã thành công')
         codeDiscount.value = res.data.data.id

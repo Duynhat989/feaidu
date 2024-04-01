@@ -88,8 +88,7 @@ const sendMessage = async () => {
             data.size = size.value
         }
     }
-    socket.emit('message', data);
-    chooseItem(ItemSelect)
+    // socket.emit('message', data);
     textMessage.value = ''
     setTimeout(() => {
         kichData()
