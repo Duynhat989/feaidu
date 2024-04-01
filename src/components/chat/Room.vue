@@ -114,8 +114,9 @@ socket.on('new_history', (historys) => {
     localStorage.setItem('tabhistory', historys)
     window.postMessage('reload_history', window.location.href);
 });
-socket.on('fingerprint', (fingerprint) => {
-    if (fingerprint.fingerprint != localStorage.getItem('fingerprint_device')) {
+socket.on('fingerprint',async (fingerprint) => {
+    var item = await localStorage.getItem('fingerprint_device') || ''
+    if (fingerprint.fingerprint != item) {
         localStorage.clear();
         location.reload()
     }
