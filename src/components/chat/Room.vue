@@ -547,12 +547,12 @@ onUnmounted(() => {
                         <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />
                         <defaultImageView v-if="typeDesign == 1" :APIKEY="API_KEY" />
                     </div>
-                    <div class="chat-input flex">
-                        <textarea type="text" id="user-input" class="text-input" rows="1"
+                    <div class="chat-input flex" >
+                        <textarea :disabled="renderMessage" type="text" id="user-input" class="text-input" rows="1"
                             placeholder="Mời nhập nội dung..." v-model="textMessage"
                             @keyup.enter="sendEnter($event)"></textarea>
                         <button class="btn-input"><i class='bx bx-microphone'></i></button>
-                        <button @click="sendMessage()" class="btn-input"><i class='bx bx-send'></i></button>
+                        <button :disabled="renderMessage" @click="sendMessage()" class="btn-input"><i class='bx bx-send'></i></button>
                     </div>
                 </div>
             </div>
