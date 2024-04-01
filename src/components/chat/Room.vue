@@ -118,7 +118,7 @@ socket.on('fingerprint',async (fingerprint) => {
     console.log("Auth:",fingerprint)
     var item = await localStorage.getItem('fingerprint_device') || ''
     if (fingerprint.fingerprint != item) {
-        if(fingerprint.fingerprint != null || fingerprint.fingerprint != undefined){
+        if(fingerprint.fingerprint == null || fingerprint.fingerprint == undefined){
             
         }else{
             alert('Tài khảon của bạn đang đăng nhập ở nơi khác')
