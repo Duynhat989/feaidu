@@ -115,13 +115,13 @@ socket.on('new_history', (historys) => {
     localStorage.setItem('tabhistory', historys)
     window.postMessage('reload_history', window.location.href);
 });
-socket.on('fingerprint',async (fingerprint) => {
-    console.log("Auth:",fingerprint)
+socket.on('fingerprint', async (fingerprint) => {
+    console.log("Auth:", fingerprint)
     var item = await localStorage.getItem('fingerprint_device') || ''
     if (fingerprint.fingerprint != item) {
-        if(fingerprint.fingerprint == null || fingerprint.fingerprint == undefined){
-            
-        }else{
+        if (fingerprint.fingerprint == null || fingerprint.fingerprint == undefined) {
+
+        } else {
             alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
             localStorage.clear();
             location.reload()
@@ -365,11 +365,25 @@ watch(typeDesign, (oldValue, newValue) => {
     newChatSocketIo()
     loadLayout()
 })
-const infoUs = JSON.parse(localStorage.getItem('info')) || []
-onMounted(() => {
+const infoUs = ref()
+const loadInfo = async () => {
+    try {
+        var as = await request.post(`api/info.php?key=${API_KEY.value}`, {
+            key: API_KEY.value
+        })
+        localStorage.setItem('info', JSON.stringify(as.data))
+        infoUs.value = JSON.parse(localStorage.getItem('info')) || []
+    } catch (error) {
+        infoUs.value = JSON.parse(localStorage.getItem('info')) || []
+    }
+}
+const loadRef = ref(false)
+onMounted(async () => {
     API_KEY.value = infoUser.value.key
+    await loadInfo()
     newSessionId.value = generateToken()
     newChatSocketIo()
+    loadRef.value = true
     loadLayout()
     loadWeb()
     loadTopic()
@@ -390,8 +404,6 @@ const next = async (numbe) => {
         }
     }
 }
-
-const user = JSON.parse(localStorage.getItem('user')) || []
 const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
@@ -402,13 +414,16 @@ onUnmounted(() => {
         <div class="center">
             <div class="main-content">
 
-                <div class="info-user">
+                <div class="info-user" v-if="loadRef">
                     <div class="info-user__content">
                         <div class="user">
-                            <span><i class='bx bx-envelope' ></i> E-mail: <span style="color: #00cdff;">{{ infoUs.data.taikhoan.mail }}</span> &emsp;</span>
+                            <span><i class='bx bx-envelope'></i> E-mail: <span style="color: #00cdff;">{{
+        infoUs.data.taikhoan.mail }}</span> &emsp;</span>
                         </div>
                         <div class="pack">
-                            <i class='bx bx-package'></i> Gói đăng ký:  <span style="color: #00cdff;"> {{ user.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{ user.services[0].expiry_date }}</span> )
+                            <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;"> {{
+        infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{
+            infoUs.data.services[0].expiry_date }}</span> )
                         </div>
                     </div>
                 </div>
@@ -547,12 +562,13 @@ onUnmounted(() => {
                         <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />
                         <defaultImageView v-if="typeDesign == 1" :APIKEY="API_KEY" />
                     </div>
-                    <div class="chat-input flex" >
+                    <div class="chat-input flex">
                         <textarea :disabled="renderMessage" type="text" id="user-input" class="text-input" rows="1"
                             placeholder="Mời nhập nội dung..." v-model="textMessage"
                             @keyup.enter="sendEnter($event)"></textarea>
                         <button class="btn-input"><i class='bx bx-microphone'></i></button>
-                        <button :disabled="renderMessage" @click="sendMessage()" class="btn-input"><i class='bx bx-send'></i></button>
+                        <button :disabled="renderMessage" @click="sendMessage()" class="btn-input"><i
+                                class='bx bx-send'></i></button>
                     </div>
                 </div>
             </div>
