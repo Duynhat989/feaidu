@@ -48,6 +48,7 @@ async function (event) {
 false);
 
 const user = JSON.parse(localStorage.getItem('user')) || []
+const info = JSON.parse(localStorage.getItem('info')) || []
 
 
 onMounted(async () => {
@@ -86,7 +87,7 @@ onMounted(async () => {
                             alt="">
                     </div>
                     <div class="username">
-                        dinhvietduy
+                        {{ info.data.taikhoan.user }}
                     </div>
                     <div class="sub-menu">
                         <div class="sub-item" @click="openAbout">
