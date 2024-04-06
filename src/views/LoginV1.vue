@@ -1,4 +1,10 @@
 <style scoped>
+.btn-code{
+    margin-top: 5px;
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid rgba(128, 128, 128, 0.308) !important;
+}
 .login {
     width: 100%;
     background-color: white;
@@ -204,14 +210,35 @@ label span {
                     <div class="label">
                         <label for="email"><span>*</span> Nhập mã xác minh</label>
                     </div>
-                    <input type="number" class="input" placeholder="" v-model="email">
+                    <input type="number" class="input" placeholder="" v-model="code">
                 </div>
                 <div class="input-group buttons">
-                    <button class="button" @click="">Xác nhận mã<i class='bx bx-loader bx-spin'
+                    <button class="button" @click="conf()">Xác nhận mã<i class='bx bx-loader bx-spin'
+                            v-if="spin"></i></button>
+                    <button class="button btn-code" @click="resetPass = 0">Trở lại<i class='bx bx-loader bx-spin'
                             v-if="spin"></i></button>
                 </div>
             </div>
-
+            <div class="reset_mail" v-if="resetPass == 2">
+                <div class="input-group">
+                    <div class="label">
+                        <label for="text"><span>*</span> Mật khẩu mới</label>
+                    </div>
+                    <input type="text" class="input" placeholder="" v-model="pasw">
+                </div>
+                <div class="input-group">
+                    <div class="label">
+                        <label for="text"><span>*</span> Xác nhận mật khẩu mới</label>
+                    </div>
+                    <input type="text" class="input" placeholder="" v-model="confpasw">
+                </div>
+                <div class="input-group buttons">
+                    <button class="button" @click="changePass()">Lưu mật khẩu mới<i class='bx bx-loader bx-spin'
+                            v-if="spin"></i></button>
+                    <button class="button btn-code" @click="resetPass = 0">Trở lại<i class='bx bx-loader bx-spin'
+                            v-if="spin"></i></button>
+                </div>
+            </div>
             <!--  -->
             <div class="notify" v-if="isShow">
                 <div class="notify-content">
@@ -314,6 +341,7 @@ const resetPass = ref(0)
 
 const email = ref('')
 const pasw = ref('')
+const confpasw = ref('')
 
 
 const user = ref('')
@@ -329,12 +357,50 @@ const isShow = ref(false)
 
 const spin = ref(false)
 
+
+
+//----------------
+const code = ref('')
+
+
 const openPassword = async () => {
     resetPass.value = 0
     LayoutAuth.value = 2
 }
 const sendCode = async () => {
-    resetPass.value = 1
+    spin.value = true
+    var res = await request.get(`mail/sendMail.php?mail=${email.value}`)
+    if(res.data.status){
+        code.value = ''
+        resetPass.value = 1
+    }else{
+        code.value = ''
+        alert(res.data.msg)
+    }
+    spin.value = false
+}
+const conf = async () => {
+    spin.value = true
+    var res = await request.get(`mail/changeReset.php?mail=${email.value}&code=${code.value}&conf=w`)
+    if(res.data.status){
+        resetPass.value = 2
+    }else{
+        code.value = ''
+        alert(res.data.msg)
+    }
+    spin.value = false
+}
+const changePass = async () => {
+    spin.value = true
+    var res = await request.get(`mail/changeReset.php?mail=${email.value}&code=${code.value}&pass=${pasw.value}&change=w`)
+    if(res.data.status){
+        resetPass.value = 0
+        LayoutAuth.value = 0
+        alert('Thay đổi mật khẩu thành công')
+    }else{
+        alert(res.data.msg)
+    }
+    spin.value = false
 }
 const turnOff = (thongbao, reset = false) => {
     notify.value = thongbao
