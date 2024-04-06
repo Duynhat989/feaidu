@@ -11,6 +11,9 @@ const openAbout = () => {
 const openContact = () => {
     emit('update:openContact');
 }
+const ResetPassword = () => {
+    emit('update:ResetPassword');
+}
 const openPay = () => {
     emit('update:openPay');
 }
@@ -95,6 +98,9 @@ onMounted(async () => {
                         </div>
                         <div class="sub-item" @click="openContact">
                             <a class="line"><i class='bx bx-support'></i> Gửi hỗ trợ</a>
+                        </div>
+                        <div class="sub-item" @click="ResetPassword">
+                            <a class="line"><i class='bx bx-support'></i> Đổi mật khẩu</a>
                         </div>
                         <div class="sub-item" @click="logout()">
                             <a class="line"><i class='bx bx-log-in-circle'></i> Đăng xuất</a>

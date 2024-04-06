@@ -4,12 +4,14 @@ import aboutView from '@/components/about/Index.vue'
 import moreView from '@/components/about/More.vue'
 import payView from '@/components/pay/Index.vue'
 import contactView from '@/components/contact/Index.vue'
+import resetView from '@/components/reset/Index.vue'
 import roomView from '@/components/chat/Room.vue'
 import { ref } from 'vue';
 
 const isShowAbout = ref(false)
 const isShowPay = ref(false)
 const isShowContact = ref(false)
+const isShowPassword = ref(false)
 const isShowMore = ref(true)
 
 const navBarTab = ref(false)
@@ -33,6 +35,7 @@ const navBarTab = ref(false)
   <aboutView v-if="isShowAbout" @update:closeAbout="isShowAbout = false"/>
   <payView v-if="isShowPay" @update:closePay="isShowPay = false"/>
   <contactView v-if="isShowContact" @update:openContact="isShowContact = false"/>
+  <resetView v-if="isShowPassword" @update:ResetPassword="isShowPassword = false"/>
   <moreView v-if="isShowMore" @update:openSign="isShowPay = true"/>
 </template>
 <style scoped>

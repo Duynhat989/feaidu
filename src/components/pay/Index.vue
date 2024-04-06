@@ -124,7 +124,7 @@ watch(selectDistrict, async (oldValue, newValue) => {
     }
 })
 const tinhtoan = async () => {
-    finalMoney.value = (totalMoney.value * curTime.value) - moneyDiscount.value
+    finalMoney.value = (totalMoney.value * curTime.value) - moneyDiscount.value - disCountMa.value
     moneyVnd.value = finalMoney.value
 }
 watch(totalMoney, async (oldValue, newValue) => {
@@ -173,8 +173,14 @@ const onLoadPayQr = async () => {
     }
     isLoadAr.value = false
 }
-
-
+const disCountMa = ref(0)
+const countMoney = async (magt) => {
+    var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=find_ma_gioi_thieu&magt=${magt}`)
+    if (res.data.status) {
+        //------------------
+        disCountMa.value = res.data.reduce
+    }
+}
 
 watch(moneyVnd, (OlaValue, NewValue) => {
     txtContentBank.value = `AIDU${infoUser.value.id}BUW${idBill.value}`
@@ -182,6 +188,8 @@ watch(moneyVnd, (OlaValue, NewValue) => {
 })
 
 onMounted(() => {
+    console.log()
+    countMoney()
     loadPacks()
     loadProvince()
 })
@@ -251,17 +259,22 @@ onMounted(() => {
                         </h5>
                         <h5>Giá gói cước: <div class="pay"><i class='bx bx-money'></i> {{ formatVnd(totalMoney) }}</div>
                         </h5>
-                        <h5>Áp mã khuyễn mãi: <div class="pay"><i class='bx bxs-discount' ></i> {{ formatVnd(moneyDiscount)
-                                }}</div>
+                        <h5>Giảm giá mã giới thiệu: <div class="pay"><i class='bx bx-money'></i> {{
+                    formatVnd(disCountMa) }}</div>
+                        </h5>
+                        <h5>Áp mã khuyễn mãi: <div class="pay"><i class='bx bxs-discount'></i> {{
+                    formatVnd(moneyDiscount)
+                }}</div>
                         </h5>
                         <h5>Tổng tiền cần thanh toán: <div class="pay"><i class='bx bx-money'></i> {{
-                    formatVnd(finalMoney)
-                }}</div>
+                        formatVnd(finalMoney)
+                    }}</div>
                         </h5>
 
                     </div>
                     <div class="pay">
-                        <button class="btn-pay" @click="onLoadPayQr"><i class='bx bx-loader-circle' v-if="isLoadAr"></i> Thanh toán ngay</button>
+                        <button class="btn-pay" @click="onLoadPayQr"><i class='bx bx-loader-circle' v-if="isLoadAr"></i>
+                            Thanh toán ngay</button>
                     </div>
                 </div>
             </div>
@@ -274,22 +287,26 @@ onMounted(() => {
                 <div class="form-pay">
                     <div class="pay flex">
                         <div class="pay_content left payment">
-                            <h5>Chi phí đăng ký/tháng: <div class="pay"><i class='bx bxs-bank' ></i> {{ formatVnd(totalMoney)
-                                    }} </div>
+                            <h5>Chi phí đăng ký/tháng: <div class="pay"><i class='bx bxs-bank'></i> {{
+                    formatVnd(totalMoney)
+                }} </div>
                             </h5>
-                            <h5>Số tháng đăng ký: <div class="pay"><i class='bx bx-calendar' ></i> {{ curTime }} </div>
+                            <h5>Số tháng đăng ký: <div class="pay"><i class='bx bx-calendar'></i> {{ curTime }} </div>
                             </h5>
-                            <h5>Áp mã khuyễn mãi: <div class="pay"><i class='bx bxs-discount' ></i> {{
+                            <h5>Áp mã khuyễn mãi: <div class="pay"><i class='bx bxs-discount'></i> {{
                     formatVnd(moneyDiscount) }}</div>
                             </h5>
+                            <h5>Giảm giá mã giới thiệu: <div class="pay"><i class='bx bx-money'></i> {{
+                    formatVnd(disCountMa) }}</div>
+                            </h5>
                             <h5>Tổng tiền cần thanh toán: <div class="pay"><i class='bx bx-money'></i> {{
-                                    formatVnd(finalMoney) }}</div>
+                    formatVnd(finalMoney) }}</div>
                             </h5>
-                            <h5>Ngân hàng chuyển khoản: <div class="pay"><i class='bx bxs-bank' ></i> ACB Bank</div>
+                            <h5>Ngân hàng chuyển khoản: <div class="pay"><i class='bx bxs-bank'></i> ACB Bank</div>
                             </h5>
-                            <h5>Số tài khoản: <div class="pay"><i class='bx bx-layer-minus' ></i> {{ txtStkBank }} </div>
+                            <h5>Số tài khoản: <div class="pay"><i class='bx bx-layer-minus'></i> {{ txtStkBank }} </div>
                             </h5>
-                            <h5>Nội dung thanh toán: <div class="pay"><i class='bx bx-notepad' ></i> {{
+                            <h5>Nội dung thanh toán: <div class="pay"><i class='bx bx-notepad'></i> {{
                                     formatVnd(txtContentBank) }}</div>
                             </h5>
                         </div>
