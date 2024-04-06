@@ -415,7 +415,7 @@ onUnmounted(() => {
             <div class="main-content">
 
                 <div class="info-user" v-if="loadRef">
-                    <div class="info-user__content">
+                    <div class="info-user__content"  v-if="infoUs.data">
                         <div class="user">
                             <span><i class='bx bx-envelope'></i> E-mail: <span style="color: #00cdff;">{{
         infoUs.data.taikhoan.mail }}</span> &emsp;</span>
