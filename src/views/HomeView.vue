@@ -27,7 +27,7 @@ const navBarTab = ref(false)
                 <i v-else class='bx bxs-right-arrow-circle' style='color: rgb(30 107 90 / 84%)'></i>
             </button>
         </div>
-        <navBarView v-if="navBarTab" @update:openAbout="isShowAbout = true" @update:openPay="isShowPay = true" @update:openContact="isShowContact = true"/>
+        <navBarView v-if="navBarTab" @update:openAbout="isShowAbout = true" @update:openPay="isShowPay = true" @update:openContact="isShowContact = true" @update:ResetPassword="isShowPassword = true"/>
      <div class="nav-chat">
         <roomView />
      </div>
@@ -36,7 +36,7 @@ const navBarTab = ref(false)
   <payView v-if="isShowPay" @update:closePay="isShowPay = false"/>
   <contactView v-if="isShowContact" @update:openContact="isShowContact = false"/>
   <resetView v-if="isShowPassword" @update:ResetPassword="isShowPassword = false"/>
-  <moreView v-if="isShowMore" @update:openSign="isShowPay = true"/>
+  <moreView v-if="isShowMore" @update:openSign="isShowPay = false"/>
 </template>
 <style scoped>
 .main{

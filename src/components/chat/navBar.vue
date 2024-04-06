@@ -100,7 +100,7 @@ onMounted(async () => {
                             <a class="line"><i class='bx bx-support'></i> Gửi hỗ trợ</a>
                         </div>
                         <div class="sub-item" @click="ResetPassword">
-                            <a class="line"><i class='bx bx-support'></i> Đổi mật khẩu</a>
+                            <a class="line"><i class='bx bx-check-shield' ></i> Đổi mật khẩu</a>
                         </div>
                         <div class="sub-item" @click="logout()">
                             <a class="line"><i class='bx bx-log-in-circle'></i> Đăng xuất</a>

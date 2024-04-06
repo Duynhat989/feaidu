@@ -23,10 +23,12 @@
 .input-group img {
     margin: auto;
 }
-.input{
+
+.input {
     padding: 7px 10px;
     color: gray;
 }
+
 .login-form .input {
     font-size: 16px;
     width: 100%;
@@ -126,7 +128,7 @@ label span {
     <div class="login">
         <div class="login-form" v-if="LayoutAuth == 0">
             <div class="input-group">
-                <img width="200" src="https://api.ailab.com.vn/images/logo/" alt="logo">
+                <img width="200" src="../assets/logo.png" alt="logo">
             </div>
             <div class="title">
                 <h5>Đăng nhập tài khoản</h5>
@@ -154,7 +156,7 @@ label span {
             </div>
             <div class="input-group flex reg">
                 <div class="orther left">
-                    <a href="#">Quên mật khẩu?</a>
+                    <a @click="openPassword()">Quên mật khẩu?</a>
                 </div>
                 <div class="orther right">
                     <a @click="LayoutAuth = 1">Đăng ký tài khoản</a>
@@ -178,9 +180,56 @@ label span {
                 </div>
             </div>
         </div>
+        <div class="login-form" v-else-if="LayoutAuth == 2">
+            <div class="input-group">
+                <img width="200" src="../assets/logo.png" alt="logo">
+            </div>
+            <div class="title">
+                <h3>Quên mật khẩu</h3>
+            </div>
+            <div class="reset_mail" v-if="resetPass == 0">
+                <div class="input-group">
+                    <div class="label">
+                        <label for="email"><span>*</span> Nhập email của bạn</label>
+                    </div>
+                    <input type="text" class="input" id="email" placeholder="Nhập email của bạn" v-model="email">
+                </div>
+                <div class="input-group buttons">
+                    <button class="button" @click="sendCode">Gửi mã xác minh<i class='bx bx-loader bx-spin'
+                            v-if="spin"></i></button>
+                </div>
+            </div>
+            <div class="reset_mail" v-if="resetPass == 1">
+                <div class="input-group">
+                    <div class="label">
+                        <label for="email"><span>*</span> Nhập mã xác minh</label>
+                    </div>
+                    <input type="number" class="input" placeholder="" v-model="email">
+                </div>
+                <div class="input-group buttons">
+                    <button class="button" @click="">Xác nhận mã<i class='bx bx-loader bx-spin'
+                            v-if="spin"></i></button>
+                </div>
+            </div>
+
+            <!--  -->
+            <div class="notify" v-if="isShow">
+                <div class="notify-content">
+                    <div class="notify-content__data flex">
+                        <div class="icon">
+                            <i class='bx bx-check'></i>
+                        </div>
+                        <div class="title">
+                            {{ notify }}
+                        </div>
+                    </div>
+                    <div class="hr" :style="'width: ' + load + '%;'"></div>
+                </div>
+            </div>
+        </div>
         <div class="login-form" v-else>
             <div class="input-group">
-                <img width="200" src="https://api.ailab.com.vn/images/logo/" alt="logo">
+                <img width="200" src="../assets/logo.png" alt="logo">
             </div>
             <div class="title">
                 <h5>Đăng ký tài khoản</h5>
@@ -211,7 +260,7 @@ label span {
                 </div>
                 <select class="input" name="" id="" v-model="country">
                     <option value="Vietnam">Vietnam</option>
-                    <option :value="item.name" v-for="(item,index) of lstCountry">{{ item.name }}</option>
+                    <option :value="item.name" v-for="(item, index) of lstCountry">{{ item.name }}</option>
                 </select>
             </div>
             <div class="input-group">
@@ -227,7 +276,7 @@ label span {
             </div>
             <div class="input-group flex reg">
                 <div class="orther left">
-                    <a href="#">Quên mật khẩu?</a>
+                    <a @click="openPassword()">Quên mật khẩu?</a>
                 </div>
                 <div class="orther right">
                     <a @click="LayoutAuth = 0">Đăng nhập tài khoản</a>
@@ -260,6 +309,7 @@ import { ref, onMounted, computed, reactive } from 'vue'
 const emit = defineEmits(); // Import emit từ defineEmits
 
 const LayoutAuth = ref(0)
+const resetPass = ref(0)
 
 
 const email = ref('')
@@ -279,6 +329,13 @@ const isShow = ref(false)
 
 const spin = ref(false)
 
+const openPassword = async () => {
+    resetPass.value = 0
+    LayoutAuth.value = 2
+}
+const sendCode = async () => {
+    resetPass.value = 1
+}
 const turnOff = (thongbao, reset = false) => {
     notify.value = thongbao
     isShow.value = true
@@ -343,9 +400,9 @@ const loadCountry = async () => {
         var res = await pere.json()
         for (const iterator of res) {
             lstCountry.value.push({
-                name:iterator.name.common,
-                cca2:iterator.cca2,
-                cca3:iterator.cca3,
+                name: iterator.name.common,
+                cca2: iterator.cca2,
+                cca3: iterator.cca3,
             })
         }
     }
