@@ -420,7 +420,7 @@ onUnmounted(() => {
                             <span><i class='bx bx-envelope'></i> E-mail: <span style="color: #00cdff;">{{
         infoUs.data.taikhoan.mail }}</span> &emsp;</span>
                         </div>
-                        <div class="pack">
+                        <div class="pack" v-if="infoUs.data.services.length > 0">
                             <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;"> {{
         infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{
             infoUs.data.services[0].expiry_date }}</span> )
