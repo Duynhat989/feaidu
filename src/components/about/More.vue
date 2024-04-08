@@ -96,7 +96,7 @@ onUnmounted(() => {
     box-shadow: 2px 2px 10px rgba(128, 128, 128, 0.281);
     margin: auto;
     padding: 15px;
-    margin-top: 2%;
+    margin-top: 20%;
     cursor: pointer;
     border-radius: 6px;
     position: relative;
