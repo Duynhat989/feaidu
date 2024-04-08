@@ -30,14 +30,14 @@ onUnmounted(() => {
     <div class="about" v-if="isShow == 0">
         <div class="about-content">
             <div class="title">
-                <h3>Đăng ký gói cước</h3>
+                <!-- <h3>Đăng ký gói cước</h3> -->
             </div>
             <div class="content flex">
-                <h2>Chào mừng đến với Gói Cước Trợ Lý AI đa dạng!</h2>
+                <h2>Chào mừng bạn đến với siêu trợ thủ Aidu!</h2>
 
-                <p><i class='bx bx-notepad' ></i> Khám phá các gói cước của chúng tôi để trải nghiệm sức mạnh của trí tuệ nhân tạo trong mọi lĩnh vực cuộc sống. Từ tiện ích cá nhân đến tự động hóa doanh nghiệp, chúng tôi có một gói phù hợp với mọi nhu cầu. Đăng ký ngay để tiết kiệm thời gian và nâng cao hiệu suất!</p>
+                <p><i class='bx bx-notepad' ></i> Khám phá sức mạnh không giới hạn của Siêu trợ thủ Aidu trong mọi lĩnh vực cuộc sống!</p>
 
-                <h4><i class='bx bxs-hot' ></i> Hy vọng bản thân bạn sẽ có 1 trải nghiệm hấp dẫn khi sử dụng dịch vụ ở trang web của chúng tôi.</h4>
+                <h4><i class='bx bxs-hot' ></i> Đăng ký sử dụng ngay để biến sức mạnh Aidu thành sức mạnh của bạn.</h4>
             </div>
             <div class="btn-group">
                 <button class="btn signup" @click="OpenSignUp">Đăng ký gói AI</button>
