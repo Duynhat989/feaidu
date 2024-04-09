@@ -213,6 +213,7 @@ const Yeuthich = ref([])
 const LstLike = ref([])
 const Total = ref(0)
 const txtSearchBox = ref('')
+const isExpired = ref(false)
 const loadLayout = async () => {
     isLoading.value = true
     FillterPromts.value = []
@@ -238,10 +239,16 @@ const loadLayout = async () => {
             location.reload()
         }
     } else {
-        Yeuthich.value = res.data.yeuthich
-        LstLike.value = res.data.like
-        FillterPromts.value = res.data.data
-        Total.value = res.data.count
+        console.log(res.data)
+        if(res.data.expired){
+            isExpired.value = true
+        }
+        else{
+            Yeuthich.value = res.data.yeuthich
+            LstLike.value = res.data.like
+            FillterPromts.value = res.data.data
+            Total.value = res.data.count
+        }
         isLoading.value = false
     }
     //---------------------------
@@ -424,6 +431,7 @@ onUnmounted(() => {
                             <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;"> {{
         infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{
             infoUs.data.services[0].expiry_date }}</span> )
+            <span style="color: red;" v-if="isExpired">Gói bạn đã hết hạn</span>
                         </div>
                     </div>
                 </div>
