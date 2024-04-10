@@ -564,7 +564,7 @@ onUnmounted(() => {
                 </div>
             </div>
             <div class="input-chat">
-                <div class="input-chat__content">
+                <div class="input-chat__content" v-if="!isExpired">
                     <containView v-if="selectItem" :config="selectItem" @update:removeSelect="selectItem = null" />
                     <div class="more-input">
                         <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />
