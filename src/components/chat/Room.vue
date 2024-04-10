@@ -431,7 +431,6 @@ onUnmounted(() => {
                             <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;"> {{
         infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{
             infoUs.data.services[0].expiry_date }}</span> )
-            <span style="color: red;" v-if="isExpired">Gói bạn đã hết hạn</span>
                         </div>
                     </div>
                 </div>
@@ -449,6 +448,7 @@ onUnmounted(() => {
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
+                        <h3 style="color: red;text-align: center;" v-if="isExpired">Gói của bạn đã hết hạn, vui lòng nâng cấp gói để sử dụng.</h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
                                 Tất cả</div>
