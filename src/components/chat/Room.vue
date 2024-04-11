@@ -32,6 +32,8 @@ const limitShowTopic = ref(6)
 const FillterPromts = ref([])
 const selectItem = ref(null)
 
+const selectItemShow = ref('')
+
 const listMessage = ref([])
 
 const textMessage = ref('')
@@ -276,6 +278,7 @@ const chooseItem = async (item) => {
     selectItem.value = null
     setTimeout(() => {
         selectItem.value = item;
+        selectItemShow.value = item.promtName
     }, 200)
 }
 const autoScroll = () => {
@@ -565,6 +568,7 @@ onUnmounted(() => {
             </div>
             <div class="input-chat">
                 <div class="input-chat__content" v-if="!isExpired">
+                    <h3 v-if="selectItemShow.length > 0"><i class='bx bx-notepad'></i> {{ selectItemShow }}</h3>
                     <containView v-if="selectItem" :config="selectItem" @update:removeSelect="selectItem = null" />
                     <div class="more-input">
                         <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />

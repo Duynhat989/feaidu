@@ -39,7 +39,7 @@ h5{
     <div class="form" id="AIDU_form_input" :data-id="idSelect">
         <label class="closeIcon"><i class='bx bx-x'  @click="unmounted()" ></i></label>
         <div class="title-form">
-            <h5><i class='bx bx-notepad'></i> {{ config.promtName }}</h5>
+            <!-- <h5><i class='bx bx-notepad'></i> {{ config.promtName }}</h5> -->
         </div>
         <div class="input-data" v-for="(item, index) of inputs">
             <label :for="`option_${index}`">{{ item.inputName }}</label>
