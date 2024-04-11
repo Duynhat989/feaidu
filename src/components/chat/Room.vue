@@ -241,7 +241,6 @@ const loadLayout = async () => {
             location.reload()
         }
     } else {
-        console.log(res.data)
         if(res.data.expired){
             isExpired.value = true
         }
@@ -250,6 +249,7 @@ const loadLayout = async () => {
             LstLike.value = res.data.like
             FillterPromts.value = res.data.data
             Total.value = res.data.count
+            isExpired.value = false
         }
         isLoading.value = false
     }
