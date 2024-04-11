@@ -17,7 +17,7 @@ const isShowMore = ref(true)
 const navBarTab = ref(false)
 
 const showOpen =  () => {
-  isShowPay = false
+  isShowMore.value = false
   isShowPay.value = true
 }
 </script>
