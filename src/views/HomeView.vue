@@ -16,7 +16,10 @@ const isShowMore = ref(true)
 
 const navBarTab = ref(false)
 
-
+const showOpen =  () => {
+  isShowPay = false
+  isShowPay.value = true
+}
 </script>
 
 <template>
@@ -36,7 +39,7 @@ const navBarTab = ref(false)
   <payView v-if="isShowPay" @update:closePay="isShowPay = false"/>
   <contactView v-if="isShowContact" @update:openContact="isShowContact = false"/>
   <resetView v-if="isShowPassword" @update:ResetPassword="isShowPassword = false"/>
-  <moreView v-if="isShowMore" @update:openSign="isShowPay = false"/>
+  <moreView v-if="isShowMore" @update:openSign="showOpen"/>
 </template>
 <style scoped>
 .main{
