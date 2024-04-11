@@ -13,7 +13,7 @@ function closePay() {
     emit('update:closePay');
 }
 const infoUser = computed(() => store.getters.infoor)
-
+console.log(infoUser.value)
 const packLsts = ref()
 const designForm = ref(1)
 const isLoading = ref(false)
@@ -174,11 +174,11 @@ const onLoadPayQr = async () => {
     isLoadAr.value = false
 }
 const disCountMa = ref(0)
-const countMoney = async (magt) => {
-    var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=find_ma_gioi_thieu&magt=${magt}`)
+const countMoney = async () => {
+    var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=find_ma_gioi_thieu&magt=${infoUser.value.magt}`)
     if (res.data.status) {
         //------------------
-        disCountMa.value = res.data.reduce
+        disCountMa.value = res.data.data.reduce
     }
 }
 
