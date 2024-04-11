@@ -363,11 +363,11 @@ const copyText = (textString) => {
 watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
     if (typeDesign.value == 1) {
-        document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...')
-        loadTopicsPic()
+        try {   document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...') } catch (error) {  }
+        try {  loadTopicsPic()   } catch (error) {  }
     } else {
-        document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...')
-        loadTopic()
+        try {  document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...')   } catch (error) {  }
+        try {  loadTopic()  } catch (error) {     }
     }
     isShowPromit.value = true
     listMessage.value = []
