@@ -241,10 +241,10 @@ const loadLayout = async () => {
             location.reload()
         }
     } else {
-        if(res.data.expired){
+        if (res.data.expired) {
             isExpired.value = true
         }
-        else{
+        else {
             Yeuthich.value = res.data.yeuthich
             LstLike.value = res.data.like
             FillterPromts.value = res.data.data
@@ -317,6 +317,18 @@ const newChatSocketIo = () => {
         mail: infoUser.value.mail,
     });
 }
+const reloadFinger = () => {
+    setInterval(() => {
+        try {
+            socket.emit('fingerprint', {
+                fingerprint: localStorage.getItem('fingerprint_device'),
+                mail: infoUser.value.mail,
+            });
+        } catch (error) {
+
+        }
+    }, 2000)
+}
 const resetLoad = () => {
     const textarea = document.getElementById('user-input');
     // Thêm sự kiện input để theo dõi khi người dùng nhập liệu
@@ -363,11 +375,11 @@ const copyText = (textString) => {
 watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
     if (typeDesign.value == 1) {
-        try {   document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...') } catch (error) {  }
-        try {  loadTopicsPic()   } catch (error) {  }
+        try { document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...') } catch (error) { }
+        try { loadTopicsPic() } catch (error) { }
     } else {
-        try {  document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...')   } catch (error) {  }
-        try {  loadTopic()  } catch (error) {     }
+        try { document.querySelector('#user-input').setAttribute('placeholder', 'Mời nhập nội dung...') } catch (error) { }
+        try { loadTopic() } catch (error) { }
     }
     isShowPromit.value = true
     listMessage.value = []
@@ -398,6 +410,7 @@ onMounted(async () => {
     loadWeb()
     loadTopic()
     resetLoad()
+    reloadFinger()
     //generateToken()
 })
 const next = async (numbe) => {
@@ -418,6 +431,8 @@ const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
 })
+const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dành cho một học sinh trung học hoặc sinh viên đại học. Lưu ý rằng thời gian học và các môn học có thể thay đổi tùy thuộc vào yêu cầu cụ thể của trường học hoặc chương trình giáo dục. Tôi đã sử dụng các môn học phổ biến và một khung thời gian tiêu chuẩn.\n\n**Thời Khóa Biểu Cơ Bản**\n\n| Ngày / Thời Gian  | 8:00 - 9:00 | 9:10 - 10:10 | 10:20 - 11:20 | 11:30 - 12:30 | PAUSE | 13:30 - 14:30 | 14:40 - 15:40 | 15:50 - 16:50 |\n|-------------------|-------------|--------------|---------------|---------------|-------|---------------|---------------|---------------|\n| Thứ Hai           | Toán        | Khoa Học     | Tiếng Anh     | Lịch Sử       | LUNCH | Thể Dục      | Nghệ Thuật    | Tự Học        |\n| Thứ Ba            | Vật Lý      | Hóa Học      | Toán          | Địa Lý        | LUNCH | Tiếng Anh     | Tin Học       | Tự Học       |\n| Thứ Tư            | Sinh Học    | Toán         | Tiếng Anh     | Lịch Sử       | LUNCH | Âm Nhạc     | Thể Dục      | Tự Học        |\n| Thứ Năm           | Hóa Học     | Vật Lý       | Khoa Học      | Tiếng Anh     | LUNCH | Địa Lý        | Nghệ Thuật    | Tin Học       |\n| Thứ Sáu           | Khoa Học    | Sinh Học     | Tiếng Anh     | Toán          | LUNCH | Thể Dục      | Âm Nhạc     | Tự Học        |\n\n**Chú thích:**\n- **PAUSE:** Thời gian nghỉ giữa giờ (thường là giờ ăn trưa).\n- **Tự Học:** Khoảng thời gian tự học hoặc dành cho các hoạt động ngoại khóa, tham gia câu lạc bộ, hoặc đọc sách thêm.\n\nNhững điều cần chú ý:\n- Thời gian giữa các tiết học (ví dụ: từ 9:00 - 9:10) là giờ giải lao giữa các lớp học.\n- \"PAUSE\" thể hiện thời gian nghỉ, có thể là bữa trưa hoặc thời gian xã hội cho học sinh.\n- Các tiết tự học có thể là thời gian dành cho học sinh để ôn tập, làm bài tập về nhà, hoặc tham gia vào các hoạt động tự chọn.\n- Môn học và thời gian có thể điều chỉnh để phù hợp với cấu trúc học tập cụ thể của trường học hoặc yêu cầu của sinh viên.\n\nBạn có thể tùy chỉnh bảng thời khóa biểu này theo nhu cầu cá nhân hoặc theo lịch trình chính thức từ trường học của bạn."
+
 </script>
 <template>
     <div :class="isShowRight ? 'room flex view' : 'room'">
@@ -425,15 +440,16 @@ onUnmounted(() => {
             <div class="main-content">
 
                 <div class="info-user" v-if="loadRef">
-                    <div class="info-user__content"  v-if="infoUs.data">
+                    <div class="info-user__content" v-if="infoUs.data">
                         <div class="user">
                             <span><i class='bx bx-envelope'></i> E-mail: <span style="color: #00cdff;">{{
-        infoUs.data.taikhoan.mail }}</span> &emsp;</span>
+                                infoUs.data.taikhoan.mail }}</span> &emsp;</span>
                         </div>
                         <div class="pack" v-if="infoUs.data.services.length > 0">
                             <i class='bx bx-package'></i> Gói đăng ký: <span style="color: #00cdff;"> {{
-        infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span style="color: #00cdff;">{{
-            infoUs.data.services[0].expiry_date }}</span> )
+                                infoUs.data.services[0].pack_title }}</span> &emsp;( Hết hạn: <span
+                                style="color: #00cdff;">{{
+                                    infoUs.data.services[0].expiry_date }}</span> )
                         </div>
                     </div>
                 </div>
@@ -451,7 +467,8 @@ onUnmounted(() => {
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
-                        <h3 style="color: red;text-align: center;" v-if="isExpired">Gói của bạn đã hết hạn, vui lòng nâng cấp gói để sử dụng.</h3>
+                        <h3 style="color: red;text-align: center;" v-if="isExpired">Gói của bạn đã hết hạn, vui lòng
+                            nâng cấp gói để sử dụng.</h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
                                 Tất cả</div>
@@ -476,11 +493,11 @@ onUnmounted(() => {
                                     <li :class="item.ChuDe == selectTopic ? `topic-item color` : `topic-item`"
                                         :key="key" :data-s="key" v-for="(item, key) of Topics.slice(0, limitShowTopic)"
                                         @click="selectTopic = item.ChuDe">{{
-        item.ChuDe }}</li>
+                                            item.ChuDe }}</li>
                                     <li class="topic-item"
                                         @click="limitShowTopic < Topics.length ? limitShowTopic = Topics.length : limitShowTopic = 6">
                                         {{
-        limitShowTopic < Topics.length ? 'Xem thêm' : 'Thu gọn' }} <i
+                                            limitShowTopic < Topics.length ? 'Xem thêm' : 'Thu gọn' }} <i
                                             class='bx bx-right-arrow-alt' v-if="limitShowTopic < Topics.length"></i><i
                                                 class='bx bx-collapse-alt' v-else></i></li>
                                 </ul>
@@ -624,11 +641,11 @@ onUnmounted(() => {
                         <li :class="item.ChuDe == selectTopic ? `topic-item color` : `topic-item`" :key="key"
                             :data-s="key" v-for="(item, key) of Topics.slice(0, limitShowTopic)"
                             @click="selectTopic = item.ChuDe">{{
-        item.ChuDe }}</li>
+                                item.ChuDe }}</li>
                         <li class="topic-item"
                             @click="limitShowTopic < Topics.length ? limitShowTopic = Topics.length : limitShowTopic = 6">
                             {{
-        limitShowTopic < Topics.length ? 'Xem thêm' : 'Thu gọn' }} <i class='bx bx-right-arrow-alt'
+                                limitShowTopic < Topics.length ? 'Xem thêm' : 'Thu gọn' }} <i class='bx bx-right-arrow-alt'
                                 v-if="limitShowTopic < Topics.length"></i><i class='bx bx-collapse-alt' v-else></i></li>
                     </ul>
                 </div>
