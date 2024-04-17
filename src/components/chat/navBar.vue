@@ -26,29 +26,29 @@ const newChat = () => {
 }
 const oldChat = (item) => {
     window.postMessage({
-        active:'old_chat',
-        data:JSON.stringify(item)
+        active: 'old_chat',
+        data: JSON.stringify(item)
     }, window.location.href);
 }
 const clear = () => {
     window.postMessage({
-        active:'clear'
+        active: 'clear'
     }, window.location.href);
 }
 const clear_room = (id_object) => {
     window.postMessage({
-        active:'clear_room',
-        data:id_object
+        active: 'clear_room',
+        data: id_object
     }, window.location.href);
 }
 window.addEventListener(
-"message",
-async function (event) {
-   if(event.data == "reload_history"){
-    tabhistory.value = JSON.parse(await localStorage.getItem('tabhistory')) || []
-   }
-},
-false);
+    "message",
+    async function (event) {
+        if (event.data == "reload_history") {
+            tabhistory.value = JSON.parse(await localStorage.getItem('tabhistory')) || []
+        }
+    },
+    false);
 
 const user = JSON.parse(localStorage.getItem('user')) || []
 const info = JSON.parse(localStorage.getItem('info')) || []
@@ -70,11 +70,11 @@ onMounted(async () => {
             </div>
             <div class="chat-history">
                 <ul class="list">
-                    <li class="list-button flex" v-for="(item ,index) of tabhistory" @click="oldChat(item)">
+                    <li class="list-button flex" v-for="(item, index) of tabhistory" @click="oldChat(item)">
                         <div class="icon">
                             <i class='bx bx-message-square-dots'></i>&ensp;
                         </div> <a>{{ item.title }}</a>
-                        <div class="edit" @click="clear_room(item.id_object)"><i class='bx bx-trash' ></i></div>
+                        <div class="edit" @click="clear_room(item.id_object)"><i class='bx bx-trash'></i></div>
                     </li>
                 </ul>
             </div>
@@ -82,7 +82,8 @@ onMounted(async () => {
         <div class="menu-tab">
             <ul class="menu">
                 <li class="menu-item" @click="openPay">
-                    <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp ( <span v-if="user.services.length > 0">{{ user.services[0].pack_title }}</span> )</a>
+                    <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp ( <span v-if="user.services.length > 0">{{
+                        user.services[0].pack_title }}</span> )</a>
                 </li>
                 <li class="menu-item flex sub-tab">
                     <div class="avata">
@@ -100,7 +101,7 @@ onMounted(async () => {
                             <a class="line"><i class='bx bx-support'></i> Gửi hỗ trợ</a>
                         </div>
                         <div class="sub-item" @click="ResetPassword">
-                            <a class="line"><i class='bx bx-check-shield' ></i> Đổi mật khẩu</a>
+                            <a class="line"><i class='bx bx-check-shield'></i> Đổi mật khẩu</a>
                         </div>
                         <div class="sub-item" @click="logout()">
                             <a class="line"><i class='bx bx-log-in-circle'></i> Đăng xuất</a>
@@ -301,6 +302,14 @@ ul {
 .menu-item:hover {
     color: white;
     cursor: pointer;
+
     background-color: #45968f;
+}
+
+@media only screen and (max-width: 800px) {
+    .menu-tab {
+        bottom: 50px;
+    }
+
 }
 </style>
