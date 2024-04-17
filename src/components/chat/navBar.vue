@@ -260,11 +260,11 @@ ul {
 }
 
 .menu-tab {
-    position: absolute;
-    bottom: 20px;
+    position: fixed;
+    bottom: 0;
     left: 0;
     background: white;
-    width: 100%;
+    width: 250px;
     z-index: 99999;
 }
 
