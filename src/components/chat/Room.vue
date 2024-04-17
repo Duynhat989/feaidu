@@ -718,7 +718,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
     min-height: 100vh;
     margin: auto;
     width: 100%;
-    position: relative;
+    /* position: relative; */
     padding-top: 0;
 }
 

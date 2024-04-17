@@ -308,7 +308,7 @@ ul {
 
 @media only screen and (max-width: 800px) {
     .menu-tab {
-        bottom: 50px;
+        /* bottom: 50px; */
     }
 
 }
