@@ -52,7 +52,7 @@
 }
 
 .button {
-    padding: 12px 50px;
+    padding: 10px 50px;
     width: 100%;
     border-radius: 5px;
     background-color: #134e4a;
@@ -107,6 +107,7 @@ label span {
     box-shadow: 1px 3px 2px 1px rgb(191 204 203 / 44%);
     border-radius: 7px;
     margin: auto;
+    background: white;
 }
 
 .icon {
@@ -269,7 +270,7 @@ label span {
             </div>
             <div class="input-group">
                 <div class="label">
-                    <label for="email"><span>*</span> Email</label>
+                    <label for="email"><span>*</span> Email(@gmail.com)</label>
                 </div>
                 <input type="text" class="input" id="emailReg" placeholder="" v-model="user">
             </div>
@@ -439,7 +440,7 @@ const handleLogin = async () => {
             key: res.data.key
         })
         localStorage.setItem('info', JSON.stringify(as.data))
-        turnOff('Đăng nhập thành công. Đang chuyển hướng!', true)
+        turnOff('Xác minh thành công. Đang đăng nhập!', true)
 
     } else {
         turnOff(res.data.message)
@@ -448,6 +449,10 @@ const handleLogin = async () => {
 }
 const handleRegister = async () => {
     spin.value = true
+    if(!user.value.includes("@gmail.com")){
+        turnOff("Vui lòng đăng ký với gmail")
+        return
+    }
     const formData = new FormData()
     formData.append('user', email.value)
     formData.append('mail', user.value)

@@ -14,6 +14,8 @@ import Clipboard from 'clipboard';
 
 import { loadInfoFormChatGPT } from '@/interact/getInputFormGPT'
 
+
+
 const isShowPromit = ref(true)
 const infoWeb = ref()
 
@@ -119,13 +121,16 @@ socket.on('new_history', (historys) => {
 });
 socket.on('fingerprint', async (fingerprint) => {
     var item = await localStorage.getItem('fingerprint_device') || ''
+    console.log("Auth", fingerprint)
     if (fingerprint.fingerprint != item) {
         if (fingerprint.fingerprint == null || fingerprint.fingerprint == undefined) {
 
         } else {
-            alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
-            localStorage.clear();
-            location.reload()
+            if (infoUser.value.mail == fingerprint.mail) {
+                alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
+                localStorage.clear();
+                location.reload()
+            }
         }
     }
 });
@@ -215,10 +220,12 @@ const LstLike = ref([])
 const Total = ref(0)
 const txtSearchBox = ref('')
 const isExpired = ref(false)
+
+const pageSize = ref(12)
 const loadLayout = async () => {
     isLoading.value = true
     FillterPromts.value = []
-    let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value}&typeAI=${typeDesign.value}`
+    let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value}&limit=${pageSize.value}&typeAI=${typeDesign.value}`
     if (folderSelect.value == 2) {
         url += "&yeuthich=on"
     }
@@ -299,9 +306,6 @@ watch(selectTopic, (oldValue, newValue) => {
     selectSubTopic.value = ''
 })
 watch(selectSubTopic, (oldValue, newValue) => {
-    // boxSearch.value = ''
-    // page.value = 0
-    // limit.value = 10
     clearTimeout(timeout)
     timeout = setTimeout(() => {
         loadLayout()
@@ -309,24 +313,13 @@ watch(selectSubTopic, (oldValue, newValue) => {
 })
 const newChatSocketIo = () => {
     socket.connect();
-    socket.emit('join_room', {
+    var data = {
         id_object: newSessionId.value,
         id_user: infoUser.value.id,
         fingerprint: localStorage.getItem('fingerprint_device'),
         mail: infoUser.value.mail,
-    });
-}
-const reloadFinger = () => {
-    // setInterval(() => {
-    //     try {
-    //         socket.emit('fingerprint', {
-    //             fingerprint: localStorage.getItem('fingerprint_device'),
-    //             mail: infoUser.value.mail,
-    //         });
-    //     } catch (error) {
-
-    //     }
-    // }, 4000)
+    }
+    socket.emit('join_room', data);
 }
 const resetLoad = () => {
     const textarea = document.getElementById('user-input');
@@ -369,6 +362,7 @@ const copyText = (textString) => {
         } else {
             console.error('Element with class .copy-button not found');
         }
+        info()
     } catch (error) {
 
     }
@@ -411,23 +405,11 @@ onMounted(async () => {
     loadWeb()
     loadTopic()
     resetLoad()
-    reloadFinger()
     //generateToken()
 })
-const next = async (numbe) => {
-    var nbPgae = Math.floor(Total.value / 12)
-    if (numbe > 0) {
-        if (page.value < nbPgae) {
-            page.value += 1
-            loadLayout()
-        }
-    } else {
-        if (page.value > 0) {
-            page.value += numbe
-            loadLayout()
-        }
-    }
-}
+watch(page,(oldValue,newValue) => {
+    loadLayout()
+})
 const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
@@ -452,7 +434,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                 style="color: #00cdff;">{{
                                     infoUs.data.services[0].expiry_date }}</span> )
                         </div>
-                        <div class="pack">
+                        <div class="pack" v-else>
                             <i class='bx bx-package'></i> Vui lòng đăng ký gói
                         </div>
                     </div>
@@ -506,7 +488,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                                 class='bx bx-collapse-alt' v-else></i></li>
                                 </ul>
                             </div>
-                            <div class="bottom" v-if="'' != selectTopic">
+                            <div class="bottom">
                                 <ul class="subtopic flex-new">
                                     <li :class="'' == selectSubTopic ? `subtopic-item subcolor` : `topic-item`"
                                         @click="selectSubTopic = ''">
@@ -519,7 +501,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                 </ul>
                             </div>
                         </div>
-                        <div class="paging flex">
+                        <!-- <div class="paging flex">
                             <div class="paging-content">
                                 <span>Từ {{ page * 12 }} - {{ ((page + 1) * 12) > Total ? Total : (page + 1) * 12 }} /
                                     Tổng {{ Total }}</span>
@@ -528,7 +510,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                 <button class="btn-paging" @click="next(-1)"><i class='bx bx-chevron-left'></i></button>
                                 <button class="btn-paging" @click="next(1)"><i class='bx bx-chevron-right'></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="promt-list flex" v-if="!isLoading">
                             <cardView v-for="(item, index) of FillterPromts" :key="index" :data="item"
                                 @click="chooseItem(item)" :API_KEY="API_KEY" :yeuthich="Yeuthich" :like="LstLike" />
@@ -537,6 +519,9 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                             <div class="load_content">
                                 <i class='bx bx-loader bx-spin'></i>
                             </div>
+                        </div>
+                        <div class="paging" style="padding-bottom: 200px;">
+                            <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="Total" />
                         </div>
                     </div>
                     <div class="messages" v-else>
@@ -551,7 +536,8 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                 <div :class="`message ${item.role}`">
                                     <h4 v-if="item.role == 'user'"
                                         style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">Bạn</h4>
-                                    <h4 v-else style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">Aidu siêu trợ thủ
+                                    <h4 v-else style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">Aidu siêu
+                                        trợ thủ
                                     </h4>
                                     <div class="icon-copy" style="position: absolute;right: 0;top: 0;cursor: pointer;"
                                         @click="copyText(item.content)">
@@ -666,16 +652,6 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                     </ul>
                 </div>
             </div>
-            <div class="paging flex">
-                <div class="paging-content">
-                    <span>Từ {{ page * 12 }} - {{ ((page + 1) * 12) > Total ? Total : (page + 1) * 12 }} / Tổng {{ Total
-                        }}</span>
-                </div>
-                <div class="paging-content">
-                    <button class="btn-paging" @click="next(-1)"><i class='bx bx-chevron-left'></i></button>
-                    <button class="btn-paging" @click="next(1)"><i class='bx bx-chevron-right'></i></button>
-                </div>
-            </div>
             <div class="promt-list flex" v-if="!isLoading">
                 <cardView v-for="(item, index) of FillterPromts" :key="index" :data="item" @click="chooseItem(item)"
                     :API_KEY="API_KEY" :yeuthich="Yeuthich" :like="LstLike" />
@@ -684,6 +660,9 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                 <div class="load_content">
                     <i class='bx bx-loader bx-spin'></i>
                 </div>
+            </div>
+            <div class="paging" style="padding-bottom: 200px;">
+                <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="Total" />
             </div>
         </div>
     </div>
@@ -720,10 +699,9 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 }
 
 .center {
-    min-height: 100vh;
-    margin: auto;
+    /* min-height: 100vh; */
+    /* margin: auto; */
     width: 100%;
-    /* position: relative; */
     padding-top: 0;
 }
 
@@ -751,7 +729,6 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 
 .promt-list {
     flex-wrap: wrap;
-    padding-bottom: 200px;
 }
 
 .load {
@@ -786,12 +763,14 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 
     .view .center {
         width: calc(100%);
+        max-height: 100vh;
+        min-height: auto;
     }
 }
 
 .icon-image {
     position: fixed;
-    top: 20px;
+    top: 65px;
     right: 20px;
     z-index: 999;
     cursor: pointer;
@@ -802,12 +781,16 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 }
 
 .right {
-    margin: 20px 0px;
+    margin: 0px 0px;
+    padding: 20px 0;
+    padding-top: 40px;
     max-width: 389px;
     max-height: 90vh;
     overflow-y: scroll;
 }
-
+.right .promt-list .item{
+    margin: auto;
+}
 ul {
     padding: 0;
     margin: 0;
@@ -850,7 +833,7 @@ ul {
 }
 
 .messages-content {
-    max-width: 780px;
+    max-width: 1000px;
     margin: auto;
     padding-bottom: 160px;
 }
@@ -1022,7 +1005,7 @@ ul {
     margin: 10px 0;
     padding: 0px 5px;
     padding-bottom: 20px;
-    max-height: calc(95vh - 50px);
+    max-height: calc(85vh - 50px);
     overflow-y: scroll;
     transition: all 1s;
 }
@@ -1055,17 +1038,17 @@ h2 {
 }
 
 .input-chat {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     padding: 20px 10px;
-    background: none;
+    background: white;
 }
 
 .input-chat__content {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     margin: auto;
     background: white;
     border: 1px solid rgba(187, 184, 184, 0.308);
@@ -1085,5 +1068,12 @@ h2 {
 
 #user-input:focus {
     outline: 1px solid rgba(0, 128, 0, 0.281);
+}
+
+
+@media (max-width: 600px) {
+    .list-content {
+        /* max-height: calc(60vh); */
+    }
 }
 </style>

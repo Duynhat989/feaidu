@@ -83,7 +83,7 @@ onMounted(async () => {
             <ul class="menu">
                 <li class="menu-item" @click="openPay">
                     <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp ( <span v-if="user.services.length > 0">{{
-                        user.services[0].pack_title }}</span> <span>Chưa đăng ký</span> )</a>
+                        user.services[0].pack_title }}</span> <span v-else>Chưa đăng ký</span> )</a>
                 </li>
                 <li class="menu-item flex sub-tab">
                     <div class="avata">
