@@ -17,9 +17,13 @@ console.log(infoUser.value)
 const packLsts = ref()
 const designForm = ref(1)
 const isLoading = ref(false)
+const isLoadFirts = ref(false)
 const loadPacks = async () => {
+    isLoading.value = true
     var res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=pack_list_all`)
     packLsts.value = res.data.data
+    isLoading.value = false
+    isLoadFirts.value = true
 }
 const payPack = async (id) => {
     isLoading.value = true
@@ -323,8 +327,8 @@ onMounted(() => {
             <div class="loading" v-if="isLoading">
                 <div class="loading__content">
                     <i class='bx bx-loader-circle bx-spin'></i>
-                    <span v-if="designForm == 1"> Đang kiểm tra gói cước</span>
-                    <span v-if="designForm == 2"> Đang chuẩn bị thanh toán</span>
+                    <span v-if="designForm == 1 && isLoadFirts"> Đang kiểm tra gói cước</span>
+                    <span v-if="designForm == 2 && isLoadFirts"> Đang chuẩn bị thanh toán</span>
                 </div>
             </div>
         </div>
@@ -414,9 +418,9 @@ select {
 
 .loading {
     position: absolute;
-    top: 20px;
+    top: 10px;
     left: 0;
-    width: 100%;
+    width: calc(100% - 10px);
     height: 100%;
     background-color: white;
     font-size: 2em;
@@ -447,7 +451,7 @@ select {
     top: 0;
     left: 0;
     padding-top: 10px;
-    background-image: linear-gradient(95.2deg, rgba(173, 252, 234, 1) 26.8%, rgba(192, 229, 246, 1) 64%);
+    background: white;
 }
 
 .about-content {
@@ -460,7 +464,7 @@ select {
     margin-top: 2%;
     cursor: pointer;
     border-radius: 6px;
-    min-height: 200px;
+    min-height: 80vh;
     position: relative;
 }
 
@@ -472,7 +476,7 @@ select {
     font-size: 13px;
     margin-bottom: 20px;
     overflow: auto;
-    max-height: 90vh;
+    max-height: 80vh;
 }
 
 .content::-webkit-scrollbar {

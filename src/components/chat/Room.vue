@@ -138,7 +138,7 @@ window.addEventListener("message", async function (event) {
         var item = JSON.parse(res.data)
         typeDesign.value = item.typeAI
         newSessionId.value = item.id_object
-        socket.disconnect()
+        // socket.disconnect()
         newChatSocketIo()
     }
     if (res.active == "clear") {
@@ -343,7 +343,9 @@ const kichData = () => {
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
 }
-
+const gotoHome = () => {
+    location.reload()
+}
 const copyText = (textString) => {
     try {
         const clipboard = new Clipboard('.copy-button', {
@@ -450,6 +452,9 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                                 style="color: #00cdff;">{{
                                     infoUs.data.services[0].expiry_date }}</span> )
                         </div>
+                        <div class="pack">
+                            <i class='bx bx-package'></i> Vui lòng đăng ký gói
+                        </div>
                     </div>
                 </div>
                 <div class="list-content">
@@ -541,12 +546,12 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                         <div class="messages-content">
                             <div v-for="(item, index) of listMessage" class="msg flex">
                                 <div class="icon"><img width="25" height="25"
-                                        :src="item.role == 'user' ? 'https://i.pinimg.com/236x/6d/38/13/6d38136429fa84b7f4011209e74bdc8c.jpg' : 'https://api.ailab.com.vn/images/ico/t%e1%ba%a3i-xu%e1%bb%91ng-_1_.ico'"
+                                        :src="item.role == 'user' ? 'https://lh3.googleusercontent.com/a/ACg8ocLnkNBjFQ-_cVJ4BI6qkl1ntMQ_1YVOY1cg5noaYpXh=s96-c' : 'https://api.ailab.com.vn/images/ico/t%e1%ba%a3i-xu%e1%bb%91ng-_1_.ico'"
                                         alt=""></div>
                                 <div :class="`message ${item.role}`">
                                     <h4 v-if="item.role == 'user'"
                                         style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">Bạn</h4>
-                                    <h4 v-else style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">ChatAIDU
+                                    <h4 v-else style="font-weight: 700;margin-bottom: 5px;padding-left: 6px;">Aidu siêu trợ thủ
                                     </h4>
                                     <div class="icon-copy" style="position: absolute;right: 0;top: 0;cursor: pointer;"
                                         @click="copyText(item.content)">
@@ -587,14 +592,14 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                     <h3 v-if="selectItemShow.length > 0"><i class='bx bx-notepad'></i> {{ selectItemShow }}</h3>
                     <containView v-if="selectItem" :config="selectItem" @update:removeSelect="selectItem = null" />
                     <div class="more-input">
-                        <defaultView v-if="API_KEY && typeDesign == 0" :APIKEY="API_KEY" />
+                        <defaultView v-if="API_KEY && typeDesign == 0 && selectItemShow.length > 0" :APIKEY="API_KEY" />
                         <defaultImageView v-if="typeDesign == 1" :APIKEY="API_KEY" />
                     </div>
                     <div class="chat-input flex">
                         <textarea :disabled="renderMessage" type="text" id="user-input" class="text-input" rows="1"
                             placeholder="Mời nhập nội dung..." v-model="textMessage"
                             @keyup.enter="sendEnter($event)"></textarea>
-                        <button class="btn-input"><i class='bx bx-microphone'></i></button>
+                        <button @click="gotoHome()" class="btn-input"><i class='bx bx-home'></i></button>
                         <button :disabled="renderMessage" @click="sendMessage()" class="btn-input"><i
                                 class='bx bx-send'></i></button>
                     </div>
@@ -686,7 +691,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 <style scoped>
 .info-user__content {
     font-size: 11px;
-    background-color: rgb(56, 56, 56);
+    background-color: #171717;
     padding: 5px 0;
 }
 
@@ -746,6 +751,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 
 .promt-list {
     flex-wrap: wrap;
+    padding-bottom: 200px;
 }
 
 .load {

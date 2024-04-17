@@ -83,7 +83,7 @@ onMounted(async () => {
             <ul class="menu">
                 <li class="menu-item" @click="openPay">
                     <a class="upgrade"><i class='bx bxl-upwork'></i> Nâng cấp ( <span v-if="user.services.length > 0">{{
-                        user.services[0].pack_title }}</span> )</a>
+                        user.services[0].pack_title }}</span> <span>Chưa đăng ký</span> )</a>
                 </li>
                 <li class="menu-item flex sub-tab">
                     <div class="avata">
@@ -156,11 +156,13 @@ onMounted(async () => {
     padding: 15px 10px;
     box-shadow: 2px 3px 2px rgba(185, 184, 184, 0.301);
     min-height: 100vh;
-    background: white;
+    background: #171717;
     position: fixed;
     z-index: 999;
 }
-
+.chat{
+    color: white;
+}
 .chat-session {
     display: block;
 
@@ -177,27 +179,27 @@ onMounted(async () => {
 .chat .chat-new {
     width: 100%;
     padding: 8px 15px;
-    border: 1px solid #134e4a7e;
-    color: #134e4a;
+    border: 1px solid #ffffff7e;
+    color: #ffffff;
     border-radius: 5px;
     transition: all 0.5s;
     background: none;
 }
 
 .chat .chat-new:hover {
-    background-color: #45968f;
+    background-color: #ffffff;
     cursor: pointer;
-    color: white;
+    color: rgb(0, 0, 0);
     transform: scale(1.01);
 }
 
 .chat-clear {
-    background-color: white;
+    background: none;
     padding: 0 10px;
     border-radius: 5px;
     transition: all 0.5s;
-    border: 1px solid rgba(255, 0, 0, 0.418);
-    color: red;
+    border: 1px solid rgba(255, 255, 255, 0.418);
+    color: rgb(255, 255, 255);
     margin-left: 5px;
 }
 
@@ -263,7 +265,7 @@ ul {
     position: fixed;
     bottom: 0;
     left: 0;
-    background: white;
+    background: #171717;
     width: 250px;
     z-index: 99999;
 }

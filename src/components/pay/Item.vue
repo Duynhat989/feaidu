@@ -89,7 +89,7 @@ onMounted(()=>{
     cursor: pointer;
     transition: all 0.3s;
     background-image: linear-gradient(to right, #2191c6, #505a8b);
-    box-shadow: 6px 10px 2px -2px #808080ad;
+    box-shadow: 6px 10px 2px -2px #3d3d3dad;
     font-weight: 700;
     color: white;
 }
@@ -105,7 +105,7 @@ onMounted(()=>{
 }
 
 .item_content {
-    background-image: linear-gradient(to right, #5cc8fc, #788fff);
+    background: #202020;
     padding: 10px;
     box-shadow: 2px 3px 6px 2px rgba(179, 173, 173, 0.726);
     transition: all 1s;

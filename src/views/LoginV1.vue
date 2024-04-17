@@ -414,7 +414,7 @@ const turnOff = (thongbao, reset = false) => {
                     window.location.reload()
                 }
             }
-        }, 25 * index)
+        }, 10 * index)
     }
 
 }

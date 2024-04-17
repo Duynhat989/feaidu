@@ -26,8 +26,8 @@ const showOpen =  () => {
   <main class="main flex">
     <div class="in-out">
             <button class="in-out-btn" @click="navBarTab = !navBarTab">
-                <i v-if="navBarTab" class='bx bxs-left-arrow-circle' style='color: rgb(30 107 90 / 84%)'></i>
-                <i v-else class='bx bxs-right-arrow-circle' style='color: rgb(30 107 90 / 84%)'></i>
+                <i v-if="navBarTab" class='bx bxs-left-arrow-circle' style='color: white'></i>
+                <i v-else class='bx bxs-right-arrow-circle' style='color: white'></i>
             </button>
         </div>
         <navBarView v-if="navBarTab" @update:openAbout="isShowAbout = true" @update:openPay="isShowPay = true" @update:openContact="isShowContact = true" @update:ResetPassword="isShowPassword = true"/>
