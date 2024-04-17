@@ -57,6 +57,7 @@ onUnmounted(() => {
     /* background: rgb(230, 206, 255); */
     transition: all 0.7s;
     color: rgb(61, 61, 61);
+    margin-top: 5px;
 }
 /* .signup{
     background: rgb(104, 155, 29);
