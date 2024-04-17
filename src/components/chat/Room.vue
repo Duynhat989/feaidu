@@ -118,7 +118,6 @@ socket.on('new_history', (historys) => {
     window.postMessage('reload_history', window.location.href);
 });
 socket.on('fingerprint', async (fingerprint) => {
-    console.log("Auth:", fingerprint)
     var item = await localStorage.getItem('fingerprint_device') || ''
     if (fingerprint.fingerprint != item) {
         if (fingerprint.fingerprint == null || fingerprint.fingerprint == undefined) {
@@ -318,16 +317,16 @@ const newChatSocketIo = () => {
     });
 }
 const reloadFinger = () => {
-    setInterval(() => {
-        try {
-            socket.emit('fingerprint', {
-                fingerprint: localStorage.getItem('fingerprint_device'),
-                mail: infoUser.value.mail,
-            });
-        } catch (error) {
+    // setInterval(() => {
+    //     try {
+    //         socket.emit('fingerprint', {
+    //             fingerprint: localStorage.getItem('fingerprint_device'),
+    //             mail: infoUser.value.mail,
+    //         });
+    //     } catch (error) {
 
-        }
-    }, 2000)
+    //     }
+    // }, 4000)
 }
 const resetLoad = () => {
     const textarea = document.getElementById('user-input');
