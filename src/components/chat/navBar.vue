@@ -173,7 +173,7 @@ onMounted(async () => {
 }
 
 .chat-top {
-    margin-top: 30px;
+    margin-top: 35px;
 }
 
 .chat .chat-new {

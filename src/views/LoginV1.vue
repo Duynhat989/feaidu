@@ -11,6 +11,7 @@
     min-height: 100vh;
     z-index: 99999999;
     padding: 16px;
+    padding-top: 5%;
 }
 
 .login-form {
@@ -18,9 +19,7 @@
     background-color: white;
     color: black;
     margin: auto;
-    margin-top: 7%;
     padding: 15px;
-    padding-top: 54px;
     box-shadow: 2px 3px 6px 1px #e5e5e5;
     border-radius: 10px;
     position: relative;
@@ -283,6 +282,12 @@ label span {
             </div>
             <div class="input-group">
                 <div class="label">
+                    <label for="phonenumber"><span></span> Số điện thoại:</label>
+                </div>
+                <input type="text" class="input" id="phonenumber" placeholder="" v-model="phonenumber">
+            </div>
+            <div class="input-group">
+                <div class="label">
                     <label for="email"><span>*</span> Quốc gia</label>
                 </div>
                 <select class="input" name="" id="" v-model="country">
@@ -342,6 +347,7 @@ const resetPass = ref(0)
 const email = ref('')
 const pasw = ref('')
 const confpasw = ref('')
+const phonenumber = ref('')
 
 
 const user = ref('')
@@ -446,6 +452,7 @@ const handleRegister = async () => {
     formData.append('user', email.value)
     formData.append('mail', user.value)
     formData.append('pass', pasw.value)
+    formData.append('phone', phonenumber.value)
     formData.append('country', country.value)
     formData.append('maGioiThieu', maGioiThieu.value)
     var res = await request.post('api/reg_acc.php', formData)

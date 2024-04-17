@@ -19,7 +19,6 @@ const newPassword = ref('')
 const confPassword = ref('')
 
 const changPassword = async () => {
-    console.log(infoUser.value)
     isLoading.value = true
     const formData = new FormData();
     formData.append('old', oldPassword.value)

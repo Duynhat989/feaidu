@@ -82,12 +82,12 @@ onMounted(()=>{
 }
 
 .item-sigin button {
-    padding: 13px 30px;
+    padding: 10px 30px;
     min-width:150px;
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.5s;
     background-image: linear-gradient(to right, #2191c6, #505a8b);
     box-shadow: 6px 10px 2px -2px #3d3d3dad;
     font-weight: 700;

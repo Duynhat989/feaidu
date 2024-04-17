@@ -13,7 +13,6 @@ function closePay() {
     emit('update:closePay');
 }
 const infoUser = computed(() => store.getters.infoor)
-console.log(infoUser.value)
 const packLsts = ref()
 const designForm = ref(1)
 const isLoading = ref(false)
@@ -366,18 +365,20 @@ onMounted(() => {
 
 .btn-pay {
     border: none;
-    padding: 13px 15px;
+    padding: 10px 15px;
     margin-top: 6px;
     background: none;
     cursor: pointer;
-    min-width: 250px;
+    min-width: 220px;
     border-radius: 5px;
-    transition: all 0.4s;
+    transition: all 0.5s;
+    font-size: 1.1em;
+    border: 1px solid rgba(128, 128, 128, 0.459);
 }
 
 .btn-pay:hover {
     transform: scale(1.01);
-    background: rgb(91, 155, 91);
+    background: rgb(147, 148, 147);
     color: white;
 }
 
@@ -424,6 +425,7 @@ select {
     height: 100%;
     background-color: white;
     font-size: 2em;
+    border-radius: 20px;
 }
 
 .loading__content {

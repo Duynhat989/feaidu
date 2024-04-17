@@ -692,7 +692,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
 .info-user__content {
     font-size: 11px;
     background-color: #171717;
-    padding: 5px 0;
+    padding: 8px 0;
 }
 
 .info-user__content .pack {
@@ -1022,7 +1022,7 @@ ul {
     margin: 10px 0;
     padding: 0px 5px;
     padding-bottom: 20px;
-    max-height: 94vh;
+    max-height: calc(95vh - 50px);
     overflow-y: scroll;
     transition: all 1s;
 }
