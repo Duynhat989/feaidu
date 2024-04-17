@@ -101,9 +101,13 @@ const sendMessage = async () => {
     }, 150)
 };
 socket.on('join_room', (previous_message) => {
-    if (JSON.parse(previous_message.messages).length > 0) {
-        isShowPromit.value = false
-        listMessage.value = JSON.parse(previous_message.messages)
+    try {
+        if (JSON.parse(previous_message.messages).length > 0) {
+            isShowPromit.value = false
+            listMessage.value = JSON.parse(previous_message.messages)
+        }
+    } catch (error) {
+
     }
 });
 socket.on('message_reply', (message) => {
@@ -120,18 +124,21 @@ socket.on('new_history', (historys) => {
     window.postMessage('reload_history', window.location.href);
 });
 socket.on('fingerprint', async (fingerprint) => {
-    var item = await localStorage.getItem('fingerprint_device') || ''
-    console.log("Auth", fingerprint)
-    if (fingerprint.fingerprint != item) {
-        if (fingerprint.fingerprint == null || fingerprint.fingerprint == undefined) {
+    try {
+        var item = await localStorage.getItem('fingerprint_device') || ''
+        if (fingerprint.fingerprint != item) {
+            if (fingerprint.fingerprint == null || fingerprint.fingerprint == undefined) {
 
-        } else {
-            if (infoUser.value.mail == fingerprint.mail) {
-                alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
-                localStorage.clear();
-                location.reload()
+            } else {
+                if (infoUser.value.mail == fingerprint.mail) {
+                    alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
+                    localStorage.clear();
+                    location.reload()
+                }
             }
         }
+    } catch (error) {
+
     }
 });
 socket.on('connect_error', (error) => {
@@ -169,51 +176,67 @@ window.addEventListener("message", async function (event) {
 
 
 const loadWeb = async () => {
-    var res = await request.post(`api/getinfoWeb.php?key=${API_KEY.value}`, {
-        key: API_KEY.value
-    })
-    infoWeb.value = res.data[0]
+    try {
+        var res = await request.post(`api/getinfoWeb.php?key=${API_KEY.value}`, {
+            key: API_KEY.value
+        })
+        infoWeb.value = res.data[0]
+    } catch (error) {
+
+    }
 }
 const loadTopic = async () => {
-    Topics.value = []
-    var res = await request.post(`api/getType.php?type=ChuDe`, {
-        key: API_KEY.value
-    })
-    for (const item of res.data.data) {
-        if (item.ChuDe.length > 2) {
-            Topics.value.push(item)
+    try {
+        Topics.value = []
+        var res = await request.post(`api/getType.php?type=ChuDe`, {
+            key: API_KEY.value
+        })
+        for (const item of res.data.data) {
+            if (item.ChuDe.length > 2) {
+                Topics.value.push(item)
+            }
         }
+        selectTopic.value = ''
+    } catch (error) {
+
     }
-    selectTopic.value = ''
 }
 watch(selectTopic, (oldValue, newValue) => {
     SubTopics.value = []
     loadSubTopics()
 })
 const loadSubTopics = async () => {
-    var res = await request.post(`api/getSubChuDe.php`, {
-        chuDe: selectTopic.value
-    })
-    if (res.data.data) {
-        for (const item of res.data.data) {
-            if (item.length > 2) {
-                SubTopics.value.push(item)
+    try {
+        var res = await request.post(`api/getSubChuDe.php`, {
+            chuDe: selectTopic.value
+        })
+        if (res.data.data) {
+            for (const item of res.data.data) {
+                if (item.length > 2) {
+                    SubTopics.value.push(item)
+                }
             }
         }
+        selectSubTopic.value = ''
+    } catch (error) {
+
     }
-    selectSubTopic.value = ''
 }
 const loadTopicsPic = async () => {
-    Topics.value = []
-    var res = await request.get(`dalle/getPromptType.php?type=chuDe`)
-    for (const item of res.data.data) {
-        if (item.chuDe.length > 2) {
-            Topics.value.push({
-                ChuDe: item.chuDe
-            })
+    try {
+        Topics.value = []
+        var res = await request.get(`dalle/getPromptType.php?type=chuDe`)
+        for (const item of res.data.data) {
+            if (item.chuDe.length > 2) {
+                Topics.value.push({
+                    ChuDe: item.chuDe
+                })
+            }
         }
+        selectTopic.value = ''
+    } catch (error) {
+
     }
-    selectTopic.value = ''
 }
 const Yeuthich = ref([])
 const LstLike = ref([])
@@ -223,41 +246,45 @@ const isExpired = ref(false)
 
 const pageSize = ref(12)
 const loadLayout = async () => {
-    isLoading.value = true
-    FillterPromts.value = []
-    let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value}&limit=${pageSize.value}&typeAI=${typeDesign.value}`
-    if (folderSelect.value == 2) {
-        url += "&yeuthich=on"
-    }
-    if (txtSearchBox.value.length > 1) {
-        url += "&search=" + txtSearchBox.value
-    }
-    if (selectTopic.value.length > 1) {
-        url += "&ChuDe=" + selectTopic.value
-        if (selectSubTopic.value.length > 1) {
-            url += "&subChuDe=" + selectSubTopic.value
+    try {
+        isLoading.value = true
+        FillterPromts.value = []
+        let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value > 0 ? page.value - 1 : 0}&limit=${pageSize.value}&typeAI=${typeDesign.value}`
+        if (folderSelect.value == 2) {
+            url += "&yeuthich=on"
         }
-    }
-    var res = await request.post(url, {
-        key: API_KEY.value
-    })
-    if (!res.data.status) {
-        if (res.data.message.includes('ID người dùng không tồn tại')) {
-            localStorage.clear()
-            location.reload()
+        if (txtSearchBox.value.length > 1) {
+            url += "&search=" + txtSearchBox.value
         }
-    } else {
-        if (res.data.expired) {
-            isExpired.value = true
+        if (selectTopic.value.length > 1) {
+            url += "&ChuDe=" + selectTopic.value
+            if (selectSubTopic.value.length > 1) {
+                url += "&subChuDe=" + selectSubTopic.value
+            }
         }
-        else {
-            Yeuthich.value = res.data.yeuthich
-            LstLike.value = res.data.like
-            FillterPromts.value = res.data.data
-            Total.value = res.data.count
-            isExpired.value = false
+        var res = await request.post(url, {
+            key: API_KEY.value
+        })
+        if (!res.data.status) {
+            if (res.data.message.includes('ID người dùng không tồn tại')) {
+                localStorage.clear()
+                location.reload()
+            }
+        } else {
+            if (res.data.expired) {
+                isExpired.value = true
+            }
+            else {
+                Yeuthich.value = res.data.yeuthich
+                LstLike.value = res.data.like
+                FillterPromts.value = res.data.data
+                Total.value = res.data.count
+                isExpired.value = false
+            }
+            isLoading.value = false
         }
-        isLoading.value = false
+    } catch (error) {
+
     }
     //---------------------------
 }
@@ -312,14 +339,18 @@ watch(selectSubTopic, (oldValue, newValue) => {
     }, 500)
 })
 const newChatSocketIo = () => {
-    socket.connect();
-    var data = {
-        id_object: newSessionId.value,
-        id_user: infoUser.value.id,
-        fingerprint: localStorage.getItem('fingerprint_device'),
-        mail: infoUser.value.mail,
+    try {
+        socket.connect();
+        var data = {
+            id_object: newSessionId.value,
+            id_user: infoUser.value.id,
+            fingerprint: localStorage.getItem('fingerprint_device'),
+            mail: infoUser.value.mail,
+        }
+        socket.emit('join_room', data);
+    } catch (error) {
+
     }
-    socket.emit('join_room', data);
 }
 const resetLoad = () => {
     const textarea = document.getElementById('user-input');
@@ -407,7 +438,7 @@ onMounted(async () => {
     resetLoad()
     //generateToken()
 })
-watch(page,(oldValue,newValue) => {
+watch(page, (oldValue, newValue) => {
     loadLayout()
 })
 const isLoading = ref(false)
@@ -788,9 +819,11 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
     max-height: 90vh;
     overflow-y: scroll;
 }
-.right .promt-list .item{
+
+.right .promt-list .item {
     margin: auto;
 }
+
 ul {
     padding: 0;
     margin: 0;
