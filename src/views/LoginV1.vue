@@ -35,7 +35,7 @@
 }
 
 .login-form .input {
-    font-size: 16px;
+    font-size: 13px;
     width: 100%;
     border: 1px solid #d9d9d9;
     border-radius: 6px;
@@ -52,7 +52,7 @@
 }
 
 .button {
-    padding: 10px 50px;
+    padding: 8px 50px;
     width: 100%;
     border-radius: 5px;
     background-color: #134e4a;
@@ -302,6 +302,9 @@ label span {
                 </div>
                 <input type="text" class="input" id="codeReg" placeholder="" v-model="maGioiThieu">
             </div>
+            <div class="checkbox">
+                <input type="checkbox" v-model="checkboxChinhSach"> <label for="">Đồng ý với chính sách của chúng tôi.</label>
+            </div>
             <!-- //------------- -->
             <div class="input-group buttons">
                 <button class="button" @click="handleRegister">Đăng ký <i class='bx bx-loader bx-spin'
@@ -339,7 +342,11 @@ import axios from 'axios'
 import request from '@/utils/request';
 import { ref, onMounted, computed, reactive } from 'vue'
 
+
+
 const emit = defineEmits(); // Import emit từ defineEmits
+
+const checkboxChinhSach = ref(false)
 
 const LayoutAuth = ref(0)
 const resetPass = ref(0)
@@ -447,6 +454,10 @@ const handleRegister = async () => {
     spin.value = true
     if(!user.value.includes("@gmail.com")){
         turnOff("Vui lòng đăng ký với gmail")
+        return
+    }
+    if(!checkboxChinhSach.value){
+        turnOff("Vui lòng đồng ý với chính sách của chúng tôi.")
         return
     }
     const formData = new FormData()
