@@ -240,7 +240,7 @@ const loadTopicsPic = async () => {
 }
 const Yeuthich = ref([])
 const LstLike = ref([])
-const Total = ref(0)
+const TotalPrompt = ref(0)
 const txtSearchBox = ref('')
 const isExpired = ref(false)
 
@@ -278,7 +278,7 @@ const loadLayout = async () => {
                 Yeuthich.value = res.data.yeuthich
                 LstLike.value = res.data.like
                 FillterPromts.value = res.data.data
-                Total.value = res.data.count
+                TotalPrompt.value = parseInt(res.data.count)
                 isExpired.value = false
             }
             isLoading.value = false
@@ -340,7 +340,6 @@ watch(selectSubTopic, (oldValue, newValue) => {
 })
 const newChatSocketIo = () => {
     try {
-        socket.connect();
         var data = {
             id_object: newSessionId.value,
             id_user: infoUser.value.id,
@@ -352,7 +351,7 @@ const newChatSocketIo = () => {
 
     }
 }
-const resetLoad = () => {
+const resetLoad = async () => {
     const textarea = document.getElementById('user-input');
     // Thêm sự kiện input để theo dõi khi người dùng nhập liệu
     textarea.addEventListener('input', function () {
@@ -400,6 +399,7 @@ const copyText = (textString) => {
 };
 watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
+    selectItemShow.value = ''
     if (typeDesign.value == 1) {
         try { document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...') } catch (error) { }
         try { loadTopicsPic() } catch (error) { }
@@ -421,6 +421,7 @@ const loadInfo = async () => {
         })
         localStorage.setItem('info', JSON.stringify(as.data))
         infoUs.value = JSON.parse(localStorage.getItem('info')) || []
+        loadRef.value = true
     } catch (error) {
         infoUs.value = JSON.parse(localStorage.getItem('info')) || []
     }
@@ -428,14 +429,14 @@ const loadInfo = async () => {
 const loadRef = ref(false)
 onMounted(async () => {
     API_KEY.value = infoUser.value.key
-    await loadInfo()
+    loadInfo()
     newSessionId.value = generateToken()
-    newChatSocketIo()
-    loadRef.value = true
-    loadLayout()
     loadWeb()
     loadTopic()
+    loadLayout()
     resetLoad()
+    socket.connect();
+    newChatSocketIo()
     //generateToken()
 })
 watch(page, (oldValue, newValue) => {
@@ -552,7 +553,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                             </div>
                         </div>
                         <div class="paging" style="padding-bottom: 200px;">
-                            <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="Total" />
+                            <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="TotalPrompt" />
                         </div>
                     </div>
                     <div class="messages" v-else>
@@ -693,7 +694,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                 </div>
             </div>
             <div class="paging" style="padding-bottom: 200px;">
-                <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="Total" />
+                <a-pagination v-model:current="page" v-model:pageSize="pageSize" :total="TotalPrompt" />
             </div>
         </div>
     </div>
@@ -1105,8 +1106,8 @@ h2 {
 
 
 @media (max-width: 600px) {
-    .list-content {
-        /* max-height: calc(60vh); */
-    }
+    /* .list-content {
+        max-height: calc(60vh);
+    } */
 }
 </style>
