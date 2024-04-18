@@ -10,16 +10,17 @@
 
 .item-content {
     width: 100%;
-    /* border: 1px solid rgb(233 228 228 / 36%); */
+    border: 1px solid rgba(233, 228, 228, 0.781);
+    box-shadow: 1px 1px 4px 1px rgba(204, 204, 204, 0.377);
     padding: 20px 10px;
     border-radius: 7px;
     min-height: 270px;
-    background-color: rgb(240 240 240);
+    /* background-color: rgb(240 240 240); */
     color: black;
 }
 
 .item-content:hover {
-    background-color: aliceblue;
+    background-color: rgba(240, 248, 255, 0.651);
     cursor: pointer;
 }
 

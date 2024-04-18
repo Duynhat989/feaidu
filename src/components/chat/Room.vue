@@ -132,7 +132,7 @@ socket.on('fingerprint', async (fingerprint) => {
             } else {
                 if (infoUser.value.mail == fingerprint.mail) {
                     alert('Tài khoản của bạn đang đăng nhập ở nơi khác')
-                    localStorage.clear();
+                    clearLocalStore()
                     location.reload()
                 }
             }
@@ -245,6 +245,15 @@ const txtSearchBox = ref('')
 const isExpired = ref(false)
 
 const pageSize = ref(12)
+const clearLocalStore = () => {
+    try {
+        localStorage.removeItem('info')
+        localStorage.removeItem('AIDU_key')
+        localStorage.removeItem('user')
+    } catch (error) {
+
+    }
+}
 const loadLayout = async () => {
     try {
         isLoading.value = true
@@ -267,7 +276,7 @@ const loadLayout = async () => {
         })
         if (!res.data.status) {
             if (res.data.message.includes('ID người dùng không tồn tại')) {
-                localStorage.clear()
+                clearLocalStore()
                 location.reload()
             }
         } else {
@@ -1080,6 +1089,7 @@ h2 {
     left: 0;
     width: 100%;
     padding: 20px 10px;
+    padding-bottom: 8px;
     background: white;
 }
 

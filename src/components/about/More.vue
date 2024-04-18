@@ -39,7 +39,7 @@ onUnmounted(() => {
 
                 <h4><i class='bx bxs-hot' ></i> Đăng ký sử dụng ngay để biến sức mạnh Aidu thành sức mạnh của bạn.</h4>
             </div>
-            <div class="btn-group">
+            <div class="btn-groups">
                 <button class="btn signup" @click="OpenSignUp">Đăng ký gói AI</button>
                 <button class="btn wairing" @click="isShow = 1">Đóng</button>
                 <button class="btn closeover" @click="isOff()">Đóng vĩnh viên</button>
@@ -48,11 +48,14 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
+.btn-groups{
+    text-align: center;
+}
 .btn{
     border: none;
     min-width: 100px;
     margin-right: 5px;
-    padding:10px 25px;
+    padding:8px 25px;
     border-radius: 6px;
     /* background: rgb(230, 206, 255); */
     transition: all 0.7s;
@@ -97,7 +100,7 @@ onUnmounted(() => {
     box-shadow: 2px 2px 10px rgba(128, 128, 128, 0.281);
     margin: auto;
     padding: 15px;
-    margin-top: 20%;
+    margin-top: 10%;
     cursor: pointer;
     border-radius: 6px;
     position: relative;

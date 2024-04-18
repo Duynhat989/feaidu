@@ -17,8 +17,17 @@ const ResetPassword = () => {
 const openPay = () => {
     emit('update:openPay');
 }
+const clearLocalStore = () => {
+    try {
+        localStorage.removeItem('info')
+        localStorage.removeItem('AIDU_key')
+        localStorage.removeItem('user')
+    } catch (error) {
+
+    }
+}
 const logout = () => {
-    localStorage.clear()
+    clearLocalStore()
     window.location.reload()
 }
 const newChat = () => {
