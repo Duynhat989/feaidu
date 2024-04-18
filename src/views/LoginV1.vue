@@ -368,8 +368,6 @@ const spin = ref(false)
 
 //----------------
 const code = ref('')
-
-
 const openPassword = async () => {
     resetPass.value = 0
     LayoutAuth.value = 2
@@ -425,8 +423,6 @@ const turnOff = (thongbao, reset = false) => {
     }
 
 }
-
-
 const handleLogin = async () => {
     spin.value = true
     const formData = new FormData();

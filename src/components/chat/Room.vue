@@ -442,6 +442,9 @@ onMounted(async () => {
 watch(page, (oldValue, newValue) => {
     loadLayout()
 })
+watch(pageSize, (oldValue, newValue) => {
+    loadLayout()
+})
 const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
