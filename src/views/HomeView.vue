@@ -32,6 +32,9 @@ const showOpen = () => {
     </div>
     <navBarView v-if="navBarTab" @update:openAbout="isShowAbout = true" @update:openPay="isShowPay = true"
       @update:openContact="isShowContact = true" @update:ResetPassword="isShowPassword = true" />
+    <div class="screan-bar" @click="navBarTab = false" v-if="navBarTab">
+
+    </div>
     <div class="nav-chat">
       <roomView />
     </div>
@@ -43,9 +46,20 @@ const showOpen = () => {
   <moreView v-if="isShowMore" @update:openSign="showOpen" />
 </template>
 <style scoped>
+.screan-bar {
+  position: fixed;
+  width: calc(100% - 250px);
+  top: 0;
+  left: 250px;
+  height: 100vh;
+  background-color: rgba(97, 97, 97, 0.247);
+  z-index: 99;
+  cursor: pointer;
+}
+
 .main {
   position: relative;
-  
+
 }
 
 .in-out {
