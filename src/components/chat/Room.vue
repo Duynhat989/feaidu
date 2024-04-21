@@ -409,6 +409,7 @@ const copyText = (textString) => {
 watch(typeDesign, (oldValue, newValue) => {
     selectItem.value = null
     selectItemShow.value = ''
+    isShowRight.value = false
     if (typeDesign.value == 1) {
         try { document.querySelector('#user-input').setAttribute('placeholder', 'Mô tả chi tiết ảnh của bạn...') } catch (error) { }
         try { loadTopicsPic() } catch (error) { }
