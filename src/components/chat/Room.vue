@@ -488,7 +488,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                         <div class="switch flex">
                             <div @click="typeDesign = 0"
                                 :class="typeDesign == 0 ? 'button chatAI selection' : 'button chatAI'"><img width="15"
-                                    height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Chat AI</div>
+                                    height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ AIdu</div>
                             <div @click="typeDesign = 1"
                                 :class="typeDesign == 1 ? 'button imageAi selection' : 'button imageAi'">
                                 <img width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/img.png"> Tạo
@@ -643,7 +643,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
         <div class="right" v-if="!isShowPromit && isShowRight">
             <div class="switch flex">
                 <div @click="typeDesign = 0" :class="typeDesign == 0 ? 'button chatAI selection' : 'button chatAI'"><img
-                        width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Chat AI</div>
+                        width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ AIdu</div>
                 <div @click="typeDesign = 1" :class="typeDesign == 1 ? 'button imageAi selection' : 'button imageAi'">
                     <img width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/img.png"> Tạo
                     ảnh AI
@@ -950,7 +950,7 @@ ul {
 }
 
 .switch {
-    width: 234px;
+    width: 264px;
     border: 1px solid rgba(128, 128, 128, 0.199);
     text-align: center;
     margin: auto;
@@ -970,7 +970,7 @@ ul {
 }
 
 .switch-folder .button {
-    width: 120px;
+    width: 180px;
     height: 26px;
     border: none;
     cursor: pointer;
@@ -985,7 +985,7 @@ ul {
 }
 
 .switch .button {
-    width: 120px;
+    width: 180px;
     height: 26px;
     border: none;
     cursor: pointer;
@@ -1004,7 +1004,7 @@ ul {
 }
 
 .selection {
-    width: 180px !important;
+    width: 200px !important;
     background: white !important;
 }
 

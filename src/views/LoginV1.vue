@@ -1,10 +1,11 @@
 <style scoped>
-.btn-code{
+.btn-code {
     margin-top: 5px;
     background-color: white !important;
     color: black !important;
     border: 1px solid rgba(128, 128, 128, 0.308) !important;
 }
+
 .login {
     width: 100%;
     background-color: white;
@@ -283,16 +284,16 @@ label span {
             </div>
             <div class="input-group">
                 <div class="label">
-                    <label for="phonenumber"><span></span> Số điện thoại:</label>
+                    <label for="phonenumber"><span>*</span> Số điện thoại:</label>
                 </div>
-                <input type="text" class="input" id="phonenumber" placeholder="" v-model="phonenumber">
+                <input type="text" class="input" @keypress="preventNonNumeric" id="phonenumber" placeholder="" v-model="phonenumber">
             </div>
             <div class="input-group">
                 <div class="label">
                     <label for="email"><span>*</span> Quốc gia</label>
                 </div>
                 <select class="input" name="" id="" v-model="country">
-                    <option value="Vietnam">Vietnam</option>
+                    <option value="Vietnam" selected>Vietnam</option>
                     <option :value="item.name" v-for="(item, index) of lstCountry">{{ item.name }}</option>
                 </select>
             </div>
@@ -303,7 +304,8 @@ label span {
                 <input type="text" class="input" id="codeReg" placeholder="" v-model="maGioiThieu">
             </div>
             <div class="checkbox">
-                <input type="checkbox" v-model="checkboxChinhSach"> <label for="">Đồng ý với chính sách của chúng tôi.</label>
+                <input type="checkbox" v-model="checkboxChinhSach"> <label for="">Đồng ý với chính sách của chúng
+                    tôi.</label>
             </div>
             <!-- //------------- -->
             <div class="input-group buttons">
@@ -340,7 +342,7 @@ label span {
 <script setup>
 import axios from 'axios'
 import request from '@/utils/request';
-import { ref, onMounted, computed, reactive } from 'vue'
+import { ref, onMounted, computed, reactive, watch } from 'vue'
 
 
 
@@ -360,7 +362,7 @@ const phonenumber = ref('')
 
 const user = ref('')
 const maGioiThieu = ref('')
-const country = ref('')
+const country = ref('Vietnam')
 
 const notify = ref('')
 
@@ -371,8 +373,28 @@ const isShow = ref(false)
 
 const spin = ref(false)
 
+const isPhoneNumber = ref(false)
 
+watch(phonenumber, (oldValue, newValue) => {
+    if (newValue !== oldValue) {
+        const phonePattern = /^\d{10}$/; // Số điện thoại gồm 10 chữ số
+        if (/^\d+$/.test(phonenumber.value)) {
+            if (phonePattern.test(phonenumber.value)) {
+                isPhoneNumber.value = true
+            } else {
+                isPhoneNumber.value = false
+            }
+        } else {
+                isPhoneNumber.value = false
+        }
+    }
 
+})
+const preventNonNumeric = (event) =>{
+    if (!/^\d+$/.test(event.key)) {
+        event.preventDefault(); // Ngăn chặn ký tự không phải số được nhập vào
+      }
+} 
 //----------------
 const code = ref('')
 const openPassword = async () => {
@@ -382,10 +404,10 @@ const openPassword = async () => {
 const sendCode = async () => {
     spin.value = true
     var res = await request.get(`mail/sendMail.php?mail=${email.value}`)
-    if(res.data.status){
+    if (res.data.status) {
         code.value = ''
         resetPass.value = 1
-    }else{
+    } else {
         code.value = ''
         alert(res.data.msg)
     }
@@ -394,9 +416,9 @@ const sendCode = async () => {
 const conf = async () => {
     spin.value = true
     var res = await request.get(`mail/changeReset.php?mail=${email.value}&code=${code.value}&conf=w`)
-    if(res.data.status){
+    if (res.data.status) {
         resetPass.value = 2
-    }else{
+    } else {
         code.value = ''
         alert(res.data.msg)
     }
@@ -405,11 +427,11 @@ const conf = async () => {
 const changePass = async () => {
     spin.value = true
     var res = await request.get(`mail/changeReset.php?mail=${email.value}&code=${code.value}&pass=${pasw.value}&change=w`)
-    if(res.data.status){
+    if (res.data.status) {
         resetPass.value = 0
         LayoutAuth.value = 0
         alert('Thay đổi mật khẩu thành công')
-    }else{
+    } else {
         alert(res.data.msg)
     }
     spin.value = false
@@ -430,6 +452,7 @@ const turnOff = (thongbao, reset = false) => {
     }
 
 }
+import { message } from 'ant-design-vue';
 const handleLogin = async () => {
     spin.value = true
     const formData = new FormData();
@@ -443,21 +466,29 @@ const handleLogin = async () => {
             key: res.data.key
         })
         localStorage.setItem('info', JSON.stringify(as.data))
-        turnOff('Xác minh thành công. Đang đăng nhập!', true)
+        message.success('Xác minh thành công. Đang đăng nhập!');
+        setTimeout(()=>{ location.reload() },1500)
 
     } else {
-        turnOff(res.data.message)
+        message.error(res.data.message);
     }
     spin.value = false
 }
 const handleRegister = async () => {
     spin.value = true
-    if(!user.value.includes("@gmail.com")){
-        turnOff("Vui lòng đăng ký với gmail")
+    if (!user.value.includes("@gmail.com")) {
+        message.error('Vui lòng đăng ký với gmail.');
+        spin.value = false
         return
     }
-    if(!checkboxChinhSach.value){
-        turnOff("Vui lòng đồng ý với chính sách của chúng tôi.")
+    if (!checkboxChinhSach.value) {
+        message.error('Vui lòng đồng ý với chính sách của chúng tôi.');
+        spin.value = false
+        return
+    }
+    if (!isPhoneNumber.value) {
+        message.error('Vui lòng nhập đúng số điện thoại.');
+        spin.value = false
         return
     }
     const formData = new FormData()
@@ -475,7 +506,8 @@ const handleRegister = async () => {
         }, 2000)
 
     } else {
-        turnOff(res.data.message)
+        
+        message.error(res.data.message);
     }
     spin.value = false
 }
