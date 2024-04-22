@@ -61,6 +61,7 @@ const senNewMess = async () => {
     isLoading.value = false
 }
 const readTickit = async (cskh_id) => {
+    wwwShow.value = !wwwShow.value
     typeDesign.value = 0
     const res = await request.get(`api/web/index.php?key=${infoUser.value.key}&action=user_list_messages&ticket=${cskh_id}`)
     lstReplys.value = []
@@ -71,6 +72,12 @@ const readTickit = async (cskh_id) => {
         }
     }
 }
+const wwwShow = ref(false)
+const changeWinChat = async () => {
+    wwwShow.value = !wwwShow.value
+    console.log(wwwShow.value)
+}
+
 let idInterval = null
 onMounted(() => {
     onLoadListTickit()
@@ -94,14 +101,17 @@ onUnmounted(() => {
                 <h3>Hộp thư hỗ trợ</h3>
             </div>
             <div class="content flex">
-                <div class="left">
+                <div class="iconClose">
+                    <button @click="changeWinChat()"><i v-if="wwwShow" class='bx bxs-chevrons-left'></i><i v-else class='bx bxs-chevrons-right'></i></button>
+                </div>
+                <div :class="`left ${wwwShow ? `mobile`:`mobile hidden`}`">
                     <div class="header">
-                        <h4>Danh sách ticktit</h4>
+                        <h4>Danh sách yêu cầu hỗ trợ</h4>
                     </div>
                     <ul class="list">
                         <li class="list-item" @click="newTickit">
                             <div class="tickit">
-                                <i class='bx bx-message-square-add'></i> Tạo tickit mới
+                                <i class='bx bx-message-square-add'></i> Tạo yêu cầu mới
                             </div>
                         </li>
                         <li class="list-item" v-for="(item, index) of lstTickits" @click="readTickit(item.cskh_id)">
@@ -119,7 +129,7 @@ onUnmounted(() => {
                 </div>
                 <div class="right" v-if="typeDesign == 0">
                     <div class="header">
-                        <h4>Chi tiết TickitID: <span v-if="nowTickit">{{ nowTickit.cskh_id }}</span></h4>
+                        <h4>Chi tiết yêu cầu: <span v-if="nowTickit">{{ nowTickit.cskh_id }}</span></h4>
                     </div>
                     <div class="right-msg">
                         <div class="messages">
@@ -140,17 +150,18 @@ onUnmounted(() => {
                         </div>
                         <div class="input">
                             <input type="text" class="input-text" v-model="newMessage">
-                            <button class="button" @click="senNewMess"><i class='bx bx-loader-circle bx-spin' v-if="isLoading" ></i><i class='bx bx-mail-send'></i></button>
+                            <button class="button" @click="senNewMess"><i class='bx bx-loader-circle bx-spin'
+                                    v-if="isLoading"></i><i class='bx bx-mail-send'></i></button>
                         </div>
                     </div>
                 </div>
                 <div class="right" v-else>
                     <div class="header">
-                        <h4>Tạo mới Tickit</h4>
+                        <h4>Tạo yêu cầu mới </h4>
                     </div>
                     <div class="right-add">
                         <div class="input">
-                            <label for="">Tiêu đề tickit</label>
+                            <label for="">Tiêu đề yêu cầu</label>
                             <input type="text" class="input-text" v-model="title" placeholder="Nhập tiêu đề hỗ trợ">
                         </div>
                         <div class="input">
@@ -164,7 +175,8 @@ onUnmounted(() => {
                                 v-model="infoContact.data.taikhoan.mail">
                         </div>
                         <div class="input">
-                            <button class="button" @click="senNewTickit()"><i class='bx bx-loader-circle bx-spin' v-if="isLoading" ></i>Gửi</button>
+                            <button class="button" @click="senNewTickit()"><i class='bx bx-loader-circle bx-spin'
+                                    v-if="isLoading"></i>Gửi</button>
                         </div>
                     </div>
                 </div>
@@ -173,7 +185,7 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
-.button{
+.button {
     padding: 6px 16px;
     min-width: 150px;
     border-radius: 6px;
@@ -181,10 +193,12 @@ onUnmounted(() => {
     box-shadow: 2px 2px 2px 2px gray;
     transition: all 0.5s;
 }
-.button:hover{
+
+.button:hover {
     box-shadow: none;
     cursor: pointer;
 }
+
 .msg-content {
     padding: 5px 10px;
     margin-left: 10px;
@@ -272,7 +286,7 @@ ul {
 }
 
 .header {
-    padding: 10px;
+    padding: 0;
 }
 
 .left {
@@ -347,6 +361,7 @@ ul {
 
 h4 {
     font-weight: 600;
+    font-size: 1.3em;
 }
 
 .close {
@@ -368,5 +383,37 @@ h4 {
     line-height: 25px;
     text-align: center;
     cursor: pointer;
+}
+
+.iconClose button {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .left {
+        position: fixed;
+        background: white;
+        min-height: 100%;
+        width: calc(100% - 20px);
+    }
+
+    .iconClose button {
+        display: block;
+        position: fixed;
+        z-index: 99;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 2em;
+    }
+    .mobile{
+
+    }
+    .hidden{
+        display: none !important;
+    }
+    .right{
+        width: 100%;
+    }
 }
 </style>
