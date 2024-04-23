@@ -189,7 +189,30 @@ watch(moneyVnd, (OlaValue, NewValue) => {
     txtContentBank.value = `AIDU${infoUser.value.id}BUW${idBill.value}`
     qrLink.value = `https://img.vietqr.io/image/ACB-${txtStkBank.value}-compact2.jpg?amount=${moneyVnd.value}&addInfo=${txtContentBank.value}&accountName=${txtNameUserBank.value}`
 })
+// -----------------------
+const isPhoneNumber = ref(false)
 
+watch(curPhone, (oldValue, newValue) => {
+    if (newValue !== oldValue) {
+        const phonePattern = /^\d{10}$/; // Số điện thoại gồm 10 chữ số
+        if (/^\d+$/.test(curPhone.value)) {
+            if (phonePattern.test(curPhone.value)) {
+                isPhoneNumber.value = true
+            } else {
+                isPhoneNumber.value = false
+            }
+        } else {
+                isPhoneNumber.value = false
+        }
+    }
+
+})
+
+const preventNonNumeric = (event) =>{
+    if (!/^\d+$/.test(event.key)) {
+        event.preventDefault(); // Ngăn chặn ký tự không phải số được nhập vào
+      }
+} 
 onMounted(() => {
     console.log()
     countMoney()
@@ -225,11 +248,11 @@ onMounted(() => {
                     </div>
                     <div class="input">
                         <label for="">Số điện thoại</label>
-                        <input type="text" class="input-text" placeholder="Số điện thoại" v-model="curPhone">
+                        <input type="text" class="input-text" placeholder="Số điện thoại" v-model="curPhone"  @keypress="preventNonNumeric">
                     </div>
 
                     <div class="input">
-                        <label for="">Thời gian đăng ký</label>
+                        <label for="">Thời gian đăng ký (tháng)</label>
                         <input type="number" class="input-text" v-model="curTime">
                     </div>
                     <div class="input">
@@ -269,6 +292,8 @@ onMounted(() => {
                     formatVnd(moneyDiscount)
                 }}</div>
                         </h5>
+                        <h5>Số tháng đăng ký: <div class="pay"><i class='bx bx-calendar'></i> {{ curTime }} </div>
+                            </h5>
                         <h5>Tổng tiền cần thanh toán: <div class="pay"><i class='bx bx-money'></i> {{
                         formatVnd(finalMoney)
                     }}</div>
@@ -290,10 +315,7 @@ onMounted(() => {
                 <div class="form-pay">
                     <div class="pay flex">
                         <div class="pay_content left payment">
-                            <h5>Chi phí đăng ký/tháng: <div class="pay"><i class='bx bxs-bank'></i> {{
-                    formatVnd(totalMoney)
-                }} </div>
-                            </h5>
+                            <h5>Chi phí đăng ký/tháng: <div class="pay"><i class='bx bxs-bank'></i> {{  formatVnd(totalMoney) }} </div> </h5>
                             <h5>Số tháng đăng ký: <div class="pay"><i class='bx bx-calendar'></i> {{ curTime }} </div>
                             </h5>
                             <h5>Áp mã khuyễn mãi: <div class="pay"><i class='bx bxs-discount'></i> {{

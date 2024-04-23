@@ -35,7 +35,7 @@ onMounted(()=>{
                     Ngày hết hạn đăng ký: <span>{{ data.expiry_date }}</span>
                 </div>
                 <div class="line price">
-                    Giá bán: <span>{{ formatVnd(data.price) }}</span>
+                    Giá bán: <span>{{ formatVnd(data.price) }}</span><span>/tháng</span>
                 </div>
                 <div class="line price">
                     Nền tảng hỗ trợ: <span>{{ data.platform }}</span>
