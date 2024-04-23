@@ -145,8 +145,8 @@ const qrLink = ref(``)
 const idBill = ref()
 const infoService = ref()
 const txtContentBank = ref('')
-const txtNameUserBank = ref('DINH VIET DUY')
-const txtStkBank = ref('14497281')
+const txtNameUserBank = ref('Công ty cổ phần công nghệ GenAi')
+const txtStkBank = ref('32666628888')
 
 const isLoadAr = ref(false)
 const onLoadPayQr = async () => {
