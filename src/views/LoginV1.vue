@@ -130,6 +130,9 @@ label span {
     cursor: pointer;
     font-size: 14px;
 }
+.addMaError{
+    font-size: 11px;
+}
 </style>
 <template>
     <div class="login">
@@ -301,7 +304,10 @@ label span {
                 <div class="label">
                     <label for="email"> Mã giới thiệu</label>
                 </div>
-                <input type="text" class="input" id="codeReg" placeholder="" v-model="maGioiThieu">
+                <input type="text" class="input" id="codeReg" placeholder="" v-model="maGioiThieu" @change="changeMaGt">
+                <label class="addMaError"><span v-if="!trueMaGioiThieu && maGioiThieu.length > 0 && !loadMaGioiThieu ">Mã không chính xác</span><span v-if="trueMaGioiThieu && !loadMaGioiThieu"style="color: green;">Thêm mã thành công</span>
+                <span v-if="loadMaGioiThieu">Đang kiểm tra...</span>
+                </label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" v-model="checkboxChinhSach"> <label for="">Đồng ý với chính sách của chúng
@@ -474,6 +480,19 @@ const handleLogin = async () => {
     }
     spin.value = false
 }
+const trueMaGioiThieu = ref(false)
+const changeMaGt = async () => {
+    // -----------------------
+    onClickDiscound()
+}
+const loadMaGioiThieu = ref(false)
+const onClickDiscound = async () => {
+    //kiểm tra mã
+    loadMaGioiThieu.value = true
+    var res = await request.post(`api/web/check.php?action=find_ma_gioi_thieu_new&magt=${maGioiThieu.value}`,)
+    trueMaGioiThieu.value = res.data.status
+    loadMaGioiThieu.value = false
+}
 const handleRegister = async () => {
     spin.value = true
     if (!user.value.includes("@gmail.com")) {
@@ -490,6 +509,13 @@ const handleRegister = async () => {
         message.error('Vui lòng nhập đúng số điện thoại.');
         spin.value = false
         return
+    }
+    if (!trueMaGioiThieu.value) {
+       if(maGioiThieu.value.length > 0){
+            message.error('Mã giới thiệu không hợp lệ.');
+            spin.value = false
+            return
+       }
     }
     const formData = new FormData()
     formData.append('user', email.value)
