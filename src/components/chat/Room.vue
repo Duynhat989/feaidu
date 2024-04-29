@@ -64,7 +64,7 @@ const sendEnter = (event) => {
 const sendMessage = async () => {
     var textMesg = textMessage.value
     console.log(textMesg.length)
-    if(textMesg.length < 3){
+    if (textMesg.length < 3) {
         message.error('Mời bạn nhập nội dung!');
         return
     }
@@ -118,9 +118,12 @@ socket.on('join_room', (previous_message) => {
 });
 socket.on('message_reply', (message) => {
     try {
-        message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content = message.text
-        renderMessage.value = !message.finish
-        autoScroll()
+        if (message.text.length > 5) {
+            message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content = message.text
+            renderMessage.value = !message.finish
+            autoScroll()
+        }
+
     } catch (error) {
 
     }
@@ -497,7 +500,8 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                         <div class="switch flex">
                             <div @click="typeDesign = 0"
                                 :class="typeDesign == 0 ? 'button chatAI selection' : 'button chatAI'"><img width="15"
-                                    height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ AIdu</div>
+                                    height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ
+                                AIdu</div>
                             <div @click="typeDesign = 1"
                                 :class="typeDesign == 1 ? 'button imageAi selection' : 'button imageAi'">
                                 <img width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/img.png"> Tạo
@@ -652,7 +656,8 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
         <div class="right" v-if="!isShowPromit && isShowRight">
             <div class="switch flex">
                 <div @click="typeDesign = 0" :class="typeDesign == 0 ? 'button chatAI selection' : 'button chatAI'"><img
-                        width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ AIdu</div>
+                        width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/chat.png"> Siêu trợ thủ AIdu
+                </div>
                 <div @click="typeDesign = 1" :class="typeDesign == 1 ? 'button imageAi selection' : 'button imageAi'">
                     <img width="15" height="15" src="https://api.ailab.com.vn/images/iconTab/img.png"> Tạo
                     ảnh AI
