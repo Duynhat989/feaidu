@@ -14,6 +14,7 @@ import Clipboard from 'clipboard';
 
 import { loadInfoFormChatGPT } from '@/interact/getInputFormGPT'
 
+import { message } from 'ant-design-vue';
 
 
 const isShowPromit = ref(true)
@@ -62,6 +63,11 @@ const sendEnter = (event) => {
 }
 const sendMessage = async () => {
     var textMesg = textMessage.value
+    console.log(textMesg.length)
+    if(textMesg.length < 3){
+        message.error('Mời bạn nhập nội dung!');
+        return
+    }
     var ItemSelect = selectItem.value
     var newMess = await loadInfoFormChatGPT(textMesg, selectItem.value)
     isShowPromit.value = false
@@ -401,7 +407,9 @@ const copyText = (textString) => {
         } else {
             console.error('Element with class .copy-button not found');
         }
+        message.success('Đã sao chép!');
         info()
+
     } catch (error) {
 
     }
