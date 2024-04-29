@@ -118,7 +118,7 @@ socket.on('join_room', (previous_message) => {
 });
 socket.on('message_reply', (message) => {
     try {
-        message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content += message.text
+        message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content = message.text
         renderMessage.value = !message.finish
         autoScroll()
     } catch (error) {
