@@ -726,6 +726,18 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
     </div>
 </template>
 <style scoped>
+.promits{
+    color: #171717;
+}
+.messages{
+    color: #171717;
+}
+.right{
+    color: #171717;
+}
+.input-chat{
+    color: #171717;
+}
 .info-user__content {
     font-size: 11px;
     background-color: #171717;
