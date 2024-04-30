@@ -64,7 +64,7 @@ const sendEnter = (event) => {
 const sendMessage = async () => {
     var textMesg = textMessage.value
     console.log(textMesg.length)
-    if (textMesg.length < 3) {
+    if (textMesg.length < 2) {
         message.error('Mời bạn nhập nội dung!');
         return
     }
