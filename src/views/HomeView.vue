@@ -43,7 +43,7 @@ const showOpen = () => {
   <payView v-if="isShowPay" @update:closePay="isShowPay = false" />
   <contactView v-if="isShowContact" @update:openContact="isShowContact = false" />
   <resetView v-if="isShowPassword" @update:ResetPassword="isShowPassword = false" />
-  <moreView v-if="isShowMore" @update:openSign="showOpen" />
+  <!-- <moreView v-if="isShowMore" @update:openSign="showOpen" /> -->
 </template>
 <style scoped>
 .screan-bar {
