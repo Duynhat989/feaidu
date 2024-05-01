@@ -133,6 +133,15 @@ label span {
 .addMaError{
     font-size: 11px;
 }
+.input_password{
+    position: relative;
+}
+.hidden_pass{
+    position: absolute;
+    top: 37px;
+    right: 15px;
+    cursor: pointer;
+}
 </style>
 <template>
     <div class="login">
@@ -150,11 +159,14 @@ label span {
                 </div>
                 <input type="text" class="input" id="email" placeholder="" v-model="email">
             </div>
-            <div class="input-group">
+            <div class="input-group input_password">
                 <div class="label">
                     <label for="pasw"><span>*</span> Mật khẩu:</label>
                 </div>
-                <input type="password" class="input" id="pasw" placeholder="" v-model="pasw">
+                <input :type="hidden_password ? 'text':`password`" class="input" id="pasw" placeholder="" v-model="pasw">
+                <div class="hidden_pass">
+                    <i class='bx bx-show-alt' @click="hidden_password = !hidden_password"></i>
+                </div>
             </div>
             <div class="input-group">
                 <input type="checkbox" id="save" name="save" value="save" style="width: 15px;cursor: pointer;">
@@ -279,11 +291,14 @@ label span {
                 <input type="text" class="input" id="emailReg" placeholder="" v-model="user">
             </div>
 
-            <div class="input-group">
+            <div class="input-group input_password">
                 <div class="label">
                     <label for="pasw"><span>*</span> Mật khẩu:</label>
                 </div>
-                <input type="password" class="input" id="pasw" placeholder="" v-model="pasw">
+                <input :type="hidden_password ? 'text':`password`" class="input" id="pasw" placeholder="" v-model="pasw">
+                <div class="hidden_pass">
+                    <i class='bx bx-show-alt' @click="hidden_password = !hidden_password"></i>
+                </div>
             </div>
             <div class="input-group">
                 <div class="label">
@@ -350,7 +365,7 @@ import axios from 'axios'
 import request from '@/utils/request';
 import { ref, onMounted, computed, reactive, watch } from 'vue'
 
-
+const hidden_password = ref(false)
 
 const emit = defineEmits(); // Import emit từ defineEmits
 
