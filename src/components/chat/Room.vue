@@ -121,6 +121,9 @@ socket.on('message_reply', (message) => {
         if (message.text.length > 5) {
             message.typeAI == 1 ? listMessage.value[listMessage.value.length - 1].content = message.text : listMessage.value[listMessage.value.length - 1].content = message.text
         }
+        if( message.typeAI == 1){
+            listMessage.value[listMessage.value.length - 1].content = message.text
+        }
         renderMessage.value = !message.finish
         autoScroll()
 
