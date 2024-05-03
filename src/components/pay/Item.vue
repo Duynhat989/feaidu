@@ -31,9 +31,9 @@ onMounted(()=>{
                 <div class="line date">
                     Thời gian: <span>{{ data.date }} ngày</span>
                 </div>
-                <div class="line date-expiry">
+                <!-- <div class="line date-expiry">
                     Ngày hết hạn đăng ký: <span>{{ data.expiry_date }}</span>
-                </div>
+                </div> -->
                 <div class="line price">
                     Giá bán: <span>{{ formatVnd(data.price) }}</span><span>/tháng</span>
                 </div>
@@ -41,7 +41,7 @@ onMounted(()=>{
                     Nền tảng hỗ trợ: <span>{{ data.platform }}</span>
                 </div>
                 <div class="line troly">
-                    Lựa chọn: <span>{{ data.support_ids.split(',').length }} trợ lý</span>
+                    Số lượng trợ thủ: <span>{{ data.support_ids.split(',').length }} trợ lý</span>
                 </div>
                 <div class="line discription">
                     Chi tiết gói: {{ data.description }}
