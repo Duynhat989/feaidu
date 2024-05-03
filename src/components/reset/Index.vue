@@ -9,6 +9,7 @@ function closeAbout() {
     // Sử dụng $emit để gửi dữ liệu qua cho cha thông qua sự kiện custom
     emit('update:ResetPassword');
 }
+const hidden_password = ref(false)
 const infoContact = JSON.parse(localStorage.getItem('info')) || []
 const infoUser = computed(() => store.getters.infoor)
 
@@ -24,20 +25,21 @@ const changPassword = async () => {
     formData.append('old', oldPassword.value)
     formData.append('new', newPassword.value)
     formData.append('conf', confPassword.value)
-    if(newPassword.value != confPassword.value){
+    if (newPassword.value != confPassword.value) {
         alert('Xác nhận mật khẩu mới không chính xác')
         return
     }
-    const res = await request.post(`api/web/index.php?key=${infoUser.value.key}&action=change_pass`,formData)
-    if(res.data.status){
+    const res = await request.post(`api/web/index.php?key=${infoUser.value.key}&action=change_pass`, formData)
+    if (res.data.status) {
+        isLoading.value = false
         alert('Đổi mật khẩu thành công')
-    }else{
+    } else {
         alert('Đổi mật khẩu thất bại')
     }
 }
 let idInterval = null
 onMounted(() => {
-    
+
 })
 onUnmounted(() => {
     clearInterval(idInterval)
@@ -53,20 +55,29 @@ onUnmounted(() => {
                 <h3>Thay đổi mật khẩu</h3>
             </div>
             <div class="content">
-                <div class="input">
+                <div class="input input_password">
                     <label for="">Mật khẩu cũ</label>
-                    <input type="password" class="input-text" placeholder="Mặc định"
+                    <input :type="hidden_password ? 'text' : `password`" class="input-text" placeholder="Mặc định"
                         v-model="oldPassword">
+                    <div class="hidden_pass">
+                        <i class='bx bx-show-alt' @click="hidden_password = !hidden_password"></i>
+                    </div>
                 </div>
-                <div class="input">
+                <div class="input input_password">
                     <label for="">Mật khẩu mới</label>
-                    <input type="password" class="input-text" placeholder="Mặc định"
+                    <input :type="hidden_password ? 'text' : `password`" class="input-text" placeholder="Mặc định"
                         v-model="newPassword">
+                    <div class="hidden_pass">
+                        <i class='bx bx-show-alt' @click="hidden_password = !hidden_password"></i>
+                    </div>
                 </div>
-                <div class="input">
+                <div class="input input_password">
                     <label for="">Xác nhận mật khẩu mới</label>
-                    <input type="password" class="input-text" placeholder="Mặc định"
+                    <input :type="hidden_password ? 'text' : `password`" class="input-text" placeholder="Mặc định"
                         v-model="confPassword">
+                    <div class="hidden_pass">
+                        <i class='bx bx-show-alt' @click="hidden_password = !hidden_password"></i>
+                    </div>
                 </div>
                 <div class="input">
                     <button class="button" @click="changPassword()"><i class='bx bx-loader-circle bx-spin'
@@ -77,6 +88,9 @@ onUnmounted(() => {
     </div>
 </template>
 <style scoped>
+.input_password{
+    position: relative;
+}
 .button {
     padding: 12px 50px;
     width: 100%;
@@ -148,7 +162,7 @@ onUnmounted(() => {
 
 .list-item:hover {
     background-color: bisque;
-} 
+}
 
 .input-button {
     padding: 8px 15px;
@@ -276,6 +290,13 @@ h4 {
     height: 25px;
     line-height: 25px;
     text-align: center;
+    cursor: pointer;
+}
+
+.hidden_pass {
+    position: absolute;
+    top: 37px;
+    right: 15px;
     cursor: pointer;
 }
 </style>
