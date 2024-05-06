@@ -29,7 +29,7 @@ onMounted(()=>{
             </div>
             <div class="item-detail">
                 <div class="line date">
-                    Thời gian: <span>{{ data.date }} ngày</span>
+                    Thời gian: <span>1 tháng</span>
                 </div>
                 <!-- <div class="line date-expiry">
                     Ngày hết hạn đăng ký: <span>{{ data.expiry_date }}</span>
@@ -41,7 +41,7 @@ onMounted(()=>{
                     Nền tảng hỗ trợ: <span>{{ data.platform }}</span>
                 </div>
                 <div class="line troly">
-                    Số lượng trợ thủ: <span>{{ data.support_ids.split(',').length }} trợ lý</span>
+                    Số lượng trợ thủ: <span>{{ data.support_ids.split(',').length }} trợ thủ</span>
                 </div>
                 <div class="line discription">
                     Chi tiết gói: {{ data.description }}
