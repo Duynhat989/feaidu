@@ -254,10 +254,10 @@ onMounted(() => {
                     <div class="input">
                         <label for="">Thời gian đăng ký (tháng)</label>
                         <select v-model="curTime" >
-                            <option value="1">1</option>
-                            <option value="3">3</option>
-                            <option value="6">6</option>
-                            <option value="12">12</option>
+                            <option value="1">1 tháng</option>
+                            <option value="3">3 tháng</option>
+                            <option value="6">6 tháng</option>
+                            <option value="12">12 tháng</option>
                         </select>
                         <!-- <input type="number" class="input-text" v-model="curTime"> -->
                     </div>
