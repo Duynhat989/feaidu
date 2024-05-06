@@ -253,7 +253,13 @@ onMounted(() => {
 
                     <div class="input">
                         <label for="">Thời gian đăng ký (tháng)</label>
-                        <input type="number" class="input-text" v-model="curTime">
+                        <select v-model="curTime" >
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="6">6</option>
+                            <option value="12">12</option>
+                        </select>
+                        <!-- <input type="number" class="input-text" v-model="curTime"> -->
                     </div>
                     <div class="input">
                         <label for="">Tỉnh/Thành phố</label>
