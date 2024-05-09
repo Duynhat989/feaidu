@@ -301,6 +301,9 @@ const loadLayout = async () => {
                 FillterPromts.value = res.data.data
                 TotalPrompt.value = parseInt(res.data.count)
                 isExpired.value = false
+                if(FillterPromts.value.length == 0 && typeDesign.value == 1){
+                    isExpired.value = true
+                }
             }
             isLoading.value = false
         }
@@ -473,8 +476,6 @@ const isLoading = ref(false)
 onUnmounted(() => {
     socket.disconnect();
 })
-const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dành cho một học sinh trung học hoặc sinh viên đại học. Lưu ý rằng thời gian học và các môn học có thể thay đổi tùy thuộc vào yêu cầu cụ thể của trường học hoặc chương trình giáo dục. Tôi đã sử dụng các môn học phổ biến và một khung thời gian tiêu chuẩn.\n\n**Thời Khóa Biểu Cơ Bản**\n\n| Ngày / Thời Gian  | 8:00 - 9:00 | 9:10 - 10:10 | 10:20 - 11:20 | 11:30 - 12:30 | PAUSE | 13:30 - 14:30 | 14:40 - 15:40 | 15:50 - 16:50 |\n|-------------------|-------------|--------------|---------------|---------------|-------|---------------|---------------|---------------|\n| Thứ Hai           | Toán        | Khoa Học     | Tiếng Anh     | Lịch Sử       | LUNCH | Thể Dục      | Nghệ Thuật    | Tự Học        |\n| Thứ Ba            | Vật Lý      | Hóa Học      | Toán          | Địa Lý        | LUNCH | Tiếng Anh     | Tin Học       | Tự Học       |\n| Thứ Tư            | Sinh Học    | Toán         | Tiếng Anh     | Lịch Sử       | LUNCH | Âm Nhạc     | Thể Dục      | Tự Học        |\n| Thứ Năm           | Hóa Học     | Vật Lý       | Khoa Học      | Tiếng Anh     | LUNCH | Địa Lý        | Nghệ Thuật    | Tin Học       |\n| Thứ Sáu           | Khoa Học    | Sinh Học     | Tiếng Anh     | Toán          | LUNCH | Thể Dục      | Âm Nhạc     | Tự Học        |\n\n**Chú thích:**\n- **PAUSE:** Thời gian nghỉ giữa giờ (thường là giờ ăn trưa).\n- **Tự Học:** Khoảng thời gian tự học hoặc dành cho các hoạt động ngoại khóa, tham gia câu lạc bộ, hoặc đọc sách thêm.\n\nNhững điều cần chú ý:\n- Thời gian giữa các tiết học (ví dụ: từ 9:00 - 9:10) là giờ giải lao giữa các lớp học.\n- \"PAUSE\" thể hiện thời gian nghỉ, có thể là bữa trưa hoặc thời gian xã hội cho học sinh.\n- Các tiết tự học có thể là thời gian dành cho học sinh để ôn tập, làm bài tập về nhà, hoặc tham gia vào các hoạt động tự chọn.\n- Môn học và thời gian có thể điều chỉnh để phù hợp với cấu trúc học tập cụ thể của trường học hoặc yêu cầu của sinh viên.\n\nBạn có thể tùy chỉnh bảng thời khóa biểu này theo nhu cầu cá nhân hoặc theo lịch trình chính thức từ trường học của bạn."
-
 </script>
 <template>
     <div :class="isShowRight ? 'room flex view' : 'room'">
@@ -513,7 +514,7 @@ const stdata = "Dưới đây là một bảng thời khóa biểu cơ bản dà
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
-                        <h3 style="color: red;text-align: center;" v-if="isExpired">Gói của bạn đã hết hạn, vui lòng
+                        <h3 style="color: red;text-align: center;" v-if="isExpired">Vui lòng
                             nâng cấp gói để sử dụng.</h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
