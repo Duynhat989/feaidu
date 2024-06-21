@@ -16,6 +16,8 @@ import { loadInfoFormChatGPT } from '@/interact/getInputFormGPT'
 
 import { message } from 'ant-design-vue';
 
+import MessageView from './Message.vue'
+
 
 const isShowPromit = ref(true)
 const infoWeb = ref()
@@ -270,7 +272,7 @@ const loadLayout = async () => {
     try {
         isLoading.value = true
         FillterPromts.value = []
-        let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value > 0 ? page.value - 1 : 0}&limit=${pageSize.value}&typeAI=${typeDesign.value}`
+        let url = `api/getPromtList.php?key=${API_KEY.value}&page=${page.value > 0 ? page.value - 1 : 0}&limit=${pageSize.value}&typeAI=${typeDesign.value}&platforms=web`
         if (folderSelect.value == 2) {
             url += "&yeuthich=on"
         }
@@ -514,8 +516,7 @@ onUnmounted(() => {
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
-                        <h3 style="color: red;text-align: center;" v-if="isExpired">Vui lòng
-                            nâng cấp gói để sử dụng.</h3>
+                        <h3 style="color: red;text-align: center;" v-if="isExpired"></h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
                                 Tất cả</div>
@@ -621,7 +622,7 @@ onUnmounted(() => {
                                             </div>
                                         </span>
                                         <span v-else>
-                                            {{ item.content }}
+                                            <MessageView :msg="item.content" :load=false />
                                         </span>
                                         <i v-if="index == listMessage.length - 1 && renderMessage"
                                             class='bx bxs-circle bx-flashing'></i>
