@@ -71,4 +71,11 @@ pre .hljs-code-header .hljs-copy-button{
     padding: 4px 10px;
     cursor: pointer;
 }
+p{
+   margin-bottom: 0 !important;
+
+}
+.chat-msg-content{
+    line-height: 1.2em;
+}
 </style>

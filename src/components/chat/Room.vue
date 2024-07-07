@@ -442,7 +442,18 @@ watch(typeDesign, (oldValue, newValue) => {
     newChatSocketIo()
     loadLayout()
 })
+function isCurrentDateGreaterThan(dateString) {
+    // Chuyển đổi chuỗi ngày thành đối tượng Date
+    const inputDate = new Date(dateString);
+    
+    // Lấy thời điểm hiện tại
+    const currentDate = new Date();
+    
+    // So sánh hai thời điểm
+    return currentDate > inputDate;
+}
 const infoUs = ref()
+const isExpiredDate = ref(false)
 const loadInfo = async () => {
     try {
         var as = await request.post(`api/info.php?key=${API_KEY.value}`, {
@@ -450,7 +461,14 @@ const loadInfo = async () => {
         })
         localStorage.setItem('info', JSON.stringify(as.data))
         infoUs.value = JSON.parse(localStorage.getItem('info')) || []
+
         loadRef.value = true
+        try {
+            let isExpi = isCurrentDateGreaterThan(infoUs.value.data.services[0].expiry_date)
+            isExpiredDate.value = isExpi
+            console.log(isExpi)
+        } catch (error) {
+        }
     } catch (error) {
         infoUs.value = JSON.parse(localStorage.getItem('info')) || []
     }
@@ -516,7 +534,7 @@ onUnmounted(() => {
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
-                        <h3 style="color: red;text-align: center;" v-if="isExpired"></h3>
+                        <h3 style="color: red;text-align: center;" v-if="isExpiredDate">Tài khoản hết hạn</h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
                                 Tất cả</div>
