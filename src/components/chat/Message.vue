@@ -76,6 +76,6 @@ p{
 
 }
 .chat-msg-content{
-    line-height: 1.2em;
+    line-height: 1.6em;
 }
 </style>
