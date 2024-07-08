@@ -72,7 +72,7 @@ pre .hljs-code-header .hljs-copy-button{
     cursor: pointer;
 }
 p{
-   margin-bottom: 0 !important;
+   /* margin-bottom: 0 !important; */
 
 }
 .chat-msg-content{

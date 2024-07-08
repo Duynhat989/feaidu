@@ -534,7 +534,7 @@ onUnmounted(() => {
                         </div>
                         <headerView :config="infoWeb" v-if="infoWeb" />
                         <div class="slogan">Trí Tuệ Nhân Tạo Đặc Dụng Hữu Ích</div>
-                        <h3 style="color: red;text-align: center;" v-if="isExpiredDate">Tài khoản hết hạn</h3>
+                        <h3 style="color: red;text-align: center;" v-if="isExpiredDate">Vui lòng nâng cấp gói để sử dụng</h3>
                         <div class="switch-folder flex">
                             <div @click="folderSelect = 1" :class="folderSelect == 1 ? 'button selection' : 'button'">
                                 Tất cả</div>
@@ -627,7 +627,7 @@ onUnmounted(() => {
                                         <i class='bx bx-pencil bx-spin' ></i><i class='' ></i>
                                     </span> -->
                                     <span v-if="item.content.data || item.content.length > 0" class="copy-button"
-                                        style="white-space: pre-wrap;overflow-wrap: break-word;">
+                                        style="overflow-wrap: break-word;">
                                         <span v-if="typeof item.content == 'object'">
                                             <div class="content">
                                                 {{ item.content.data[0].revised_prompt || item.content }}
