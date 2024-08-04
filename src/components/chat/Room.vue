@@ -640,7 +640,8 @@ onUnmounted(() => {
                                             </div>
                                         </span>
                                         <span v-else>
-                                            <MessageView :msg="item.content" :load=false />
+                                            <div>{{ item.content }}</div>
+                                            <!-- <MessageView :msg="item.content" :load=false /> -->
                                         </span>
                                         <i v-if="index == listMessage.length - 1 && renderMessage"
                                             class='bx bxs-circle bx-flashing'></i>
